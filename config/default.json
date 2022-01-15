@@ -1,4 +1,6 @@
 {
   "mongoURI": "mongodb+srv://trunght1810:trunght1810@socialdev.fcwuo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-  "jwtSecret": "MySeasdasdasd121212@@@@!!@#!@#@#"
+  "jwtSecret": "MySeasdasdasd121212@@@@!!@#!@#@#",
+  "githubClientId": "Iv1.5be588d20f7d3067",
+  "githubSecret": "6ca8dd9e936f559b4571e8fee7961347c84abee1"
 }
