@@ -1,16 +1,28 @@
 const express = require("express");
 const connectDB = require("./config/db");
+const expressLayout = require("express-ejs-layouts");
+const cookieParser = require("cookie-parser");
+const path = require("path");
 const app = express();
 
 //Connect DB
 connectDB();
 
 // Init Middleware
-app.use(express.json({ extended: false }));
 app.get("/", (req, res) => {
   res.send("Hello world");
 });
-
+//Set up
+app.use(express.static(path.join(__dirname, "public")));
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true, limit: "10kb" }));
+// app.use(express.json({ limit: "10kb" }));
+app.use(express.json({ extended: false }));
+// View engine
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+app.set("layout", path.join(__dirname, "./views/layouts/layout-1"));
+app.use(expressLayout);
 // Define Routes
 app.use("/api/users", require("./routes/api/user"));
 app.use("/api/auth", require("./routes/api/auth"));
