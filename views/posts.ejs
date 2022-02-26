@@ -1,0 +1,73 @@
+<section class="container">
+  <h1 class="large text-primary">Posts</h1>
+  <p class="lead"><i class="fas fa-user"></i> Welcome to the community!</p>
+
+  <div class="post-form">
+    <div class="bg-primary p">
+      <h3>Say Something...</h3>
+    </div>
+    <form class="form my-1">
+      <textarea
+        name="text"
+        cols="30"
+        rows="5"
+        placeholder="Create a post"
+        required
+        id="txtContentPost"
+      ></textarea>
+      <input
+        type="button"
+        class="btn btn-dark my-1"
+        value="Submit"
+        id="btnCreatePost"
+      />
+    </form>
+  </div>
+
+  <div class="posts">
+    <%if (posts) {%>
+    <!--  -->
+    <% posts.forEach((post)=>{%>
+    <div class="post bg-white p-1 my-1">
+      <div>
+        <a href="profile.html">
+          <img class="round-img" src="<%= post.avatar%>" alt="" />
+          <h4><%= post.name%></h4>
+        </a>
+      </div>
+      <div>
+        <p class="my-1"><%- post.text%></p>
+        <p class="post-date">
+          Posted on <%= (post.date.getMonth()+1).toString().padStart(2,
+          '0')%>/<%=post.date.getDate()%>/<%=post.date.getFullYear()%>
+        </p>
+
+        <button
+          type="button"
+          class="btn btn-light btnLike"
+          data-id="<%= post._id%>"
+        >
+          <i class="fas fa-thumbs-up"></i>
+          <span id="<%= post._id%>"><%= post.likes.length%></span>
+        </button>
+
+        <a href="/post/<%= post._id%>" class="btn btn-primary">
+          Discussion
+          <span class="comment-count"><%= post.comments.length%></span>
+        </a>
+        <%if (post.user.toString() === locals.user.id.toString()){%>
+        <button
+          type="button"
+          class="btn btn-danger btnDelete"
+          data-id="<%=post._id%>"
+        >
+          <i class="fas fa-times"></i>
+        </button>
+        <%}%>
+      </div>
+    </div>
+    <%})%>
+    <!--  -->
+    <% }%>
+  </div>
+</section>

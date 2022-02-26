@@ -1,11 +1,11 @@
 const express = require("express");
-const router = express.Router();
+const { auth } = require("../../middleware/auth");
 const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
-const auth = require("../../middleware/auth");
 const User = require("../../models/User");
+const router = express.Router();
 // @route     GET api/auth
 // @desc      Test route
 // @access    Public
@@ -40,14 +40,14 @@ router.post(
       let user = await User.findOne({ email });
       if (!user) {
         return res.status(400).json({
-          errors: [{ msg: "Invalid Creadentials" }],
+          errors: [{ msg: "Incorrect email or password" }],
         });
       }
 
       const isMath = await bcrypt.compare(password, user.password);
       if (!isMath) {
         return res.status(400).json({
-          errors: [{ msg: "Invalid Creadentials" }],
+          errors: [{ msg: "Incorrect email or password" }],
         });
       }
 
@@ -60,7 +60,16 @@ router.post(
         { expiresIn: 360000 },
         (err, token) => {
           if (err) throw err;
-          res.json({ token });
+          const cookieOptions = {
+            expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+            httpOnly: true,
+          };
+          if (req.secure || req.headers["x-forwarded-proto"] === "https") {
+            cookieOptions.secure = true;
+          }
+          res.cookie("jwt", token, cookieOptions);
+          user.password = undefined;
+          res.json({ user });
         }
       );
     } catch (err) {
@@ -69,4 +78,14 @@ router.post(
     }
   }
 );
+// @route     GET api/auth/logout
+// @desc      Test route
+// @access    Public
+router.get("/logout", auth, async (req, res) => {
+  res.cookie("jwt", "logout", {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+  res.redirect("/");
+});
 module.exports = router;

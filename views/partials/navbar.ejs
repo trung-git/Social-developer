@@ -1,0 +1,37 @@
+<% if (!locals.user) {%>
+<nav class="navbar bg-dark">
+  <h1>
+    <a href="/"><i class="fas fa-code"></i> FoDev</a>
+  </h1>
+  <ul>
+    <li><a href="/profiles">Developers</a></li>
+    <li><a href="/register">Register</a></li>
+    <li><a href="/login">Login</a></li>
+  </ul>
+</nav>
+
+<% } else {%>
+<!--Navbar for logined users  -->
+<nav class="navbar bg-dark">
+  <h1>
+    <a href="/"><i class="fas fa-code"></i> FoDev</a>
+  </h1>
+  <ul>
+    <li><a href="/profiles">Developers</a></li>
+    <li><a href="/home">Posts</a></li>
+    <li>
+      |
+      <a href="/me" title="Dashboard"
+        ><i class="fas fa-user"></i> <span class="hide-sm">Dashboard</span></a
+      >
+    </li>
+    <li>
+      <a href="/api/auth/logout" title="Logout">
+        <i class="fas fa-sign-out-alt"></i>
+        <span class="hide-sm">Logout</span></a
+      >
+    </li>
+  </ul>
+</nav>
+
+<% }%>
