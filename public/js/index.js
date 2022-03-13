@@ -5,8 +5,9 @@ const btnDelete = document.querySelectorAll('.btnDelete');
 const btnLike = document.querySelectorAll('.btnLike');
 const btnSubmitCmt = document.getElementById('btnSubmitCmt');
 const btnDeleteCmt = document.getElementsByClassName('btnDeleteCmt');
+const btnRegister = document.getElementById('btnRegister');
 // Import
-import { login } from './auth.js';
+import { login, register } from './auth.js';
 import {
   createComment,
   createPost,
@@ -122,16 +123,43 @@ if (btnSubmitCmt) {
 if (btnDeleteCmt.length > 0) {
   for (let btn of btnDeleteCmt) {
     btn.addEventListener('click', async function (e) {
-        e.preventDefault();
-        console.log('click');
-        if (confirm('Do you want to delete this comment?')) {
-          await deleteCmt(
-            document.getElementById('btnSubmitCmt').dataset.id,
-            btn.dataset.id,
-            btn.closest('.post')
-          );
-        }
+      e.preventDefault();
+      console.log('click');
+      if (confirm('Do you want to delete this comment?')) {
+        await deleteCmt(
+          document.getElementById('btnSubmitCmt').dataset.id,
+          btn.dataset.id,
+          btn.closest('.post')
+        );
       }
-    );
+    });
   }
+}
+
+if (btnRegister) {
+  btnRegister.addEventListener('click', async (e) => {
+    e.preventDefault();
+    // Xu ly Password va ConfirmPassword
+    if (
+      document.getElementById('inputPassword').value !==
+      document.getElementById('inputConfirmPassword').value
+    ) {
+      document
+        .querySelector('.container')
+        .insertAdjacentHTML(
+          'afterbegin',
+          `<div class="alert alert-danger">Passwords are not the same</div>`
+        );
+      window.setTimeout(() => {
+        document.querySelector('.alert').remove();
+      }, 5000);
+    } else {
+      // Goi API
+      await register(
+        document.getElementById('inputName').value,
+        document.getElementById('inputEmail').value,
+        document.getElementById('inputPassword').value
+      );
+    }
+  });
 }

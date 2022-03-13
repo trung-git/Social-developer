@@ -1,23 +1,23 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const gravatar = require("gravatar");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const User = require("../../models/User");
-const { check, validationResult } = require("express-validator");
-const config = require("config");
+const gravatar = require('gravatar');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const User = require('../../models/User');
+const { check, validationResult } = require('express-validator');
+const config = require('config');
 
 // @route     POST api/users
 // @desc      Resgister user
 // @access    Public
 router.post(
-  "/",
+  '/',
   [
-    check("name", "Name is required").not().isEmpty(),
-    check("email", "Please include a valid email").isEmail(),
+    check('name', 'Name is required').not().isEmpty(),
+    check('email', 'Please include a valid email').isEmail(),
     check(
-      "password",
-      "Please enter a password with 6 or mor characters"
+      'password',
+      'Please enter a password with 6 or more characters'
     ).isLength({ min: 6 }),
   ],
   async (req, res) => {
@@ -33,14 +33,14 @@ router.post(
       let user = await User.findOne({ email });
       if (user) {
         return res.status(400).json({
-          errors: [{ msg: "User already exists" }],
+          errors: [{ msg: 'User already exists' }],
         });
       }
       // Get users gravatar
       const avatar = gravatar.url(email, {
-        s: "200",
-        r: "pg",
-        d: "mm",
+        s: '200',
+        r: 'pg',
+        d: 'mm',
       });
 
       user = new User({
@@ -62,7 +62,7 @@ router.post(
       };
       jwt.sign(
         payload,
-        config.get("jwtSecret"),
+        config.get('jwtSecret'),
         { expiresIn: 360000 },
         (err, token) => {
           if (err) throw err;
@@ -70,17 +70,17 @@ router.post(
             expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
             httpOnly: true,
           };
-          if (req.secure || req.headers["x-forwarded-proto"] === "https") {
+          if (req.secure || req.headers['x-forwarded-proto'] === 'https') {
             cookieOptions.secure = true;
           }
-          res.cookie("jwt", token, cookieOptions);
+          res.cookie('jwt', token, cookieOptions);
           user.password = undefined;
           res.json({ user });
         }
       );
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server error");
+      res.status(500).send('Server error');
     }
   }
 );

@@ -3,10 +3,21 @@
   <p class="lead"><i class="fas fa-user"></i> Create Your Account</p>
   <form class="form" action="create-profile.html">
     <div class="form-group">
-      <input type="text" placeholder="Name" name="name" required />
+      <input
+        type="text"
+        id="inputName"
+        placeholder="Name"
+        name="name"
+        required
+      />
     </div>
     <div class="form-group">
-      <input type="email" placeholder="Email Address" name="email" />
+      <input
+        type="email"
+        id="inputEmail"
+        placeholder="Email Address"
+        name="email"
+      />
       <small class="form-text"
         >This site uses Gravatar so if you want a profile image, use a Gravatar
         email</small
@@ -15,6 +26,7 @@
     <div class="form-group">
       <input
         type="password"
+        id="inputPassword"
         placeholder="Password"
         name="password"
         minLength="6"
@@ -23,12 +35,18 @@
     <div class="form-group">
       <input
         type="password"
+        id="inputConfirmPassword"
         placeholder="Confirm Password"
         name="password2"
         minLength="6"
       />
     </div>
-    <input type="submit" class="btn btn-primary" value="Register" />
+    <input
+      type="button"
+      id="btnRegister"
+      class="btn btn-primary"
+      value="Register"
+    />
   </form>
   <p class="my-1">Already have an account? <a href="/login">Sign In</a></p>
 </section>
