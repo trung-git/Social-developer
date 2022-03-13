@@ -41,10 +41,9 @@
           Posted on <%= (post.date.getMonth()+1).toString().padStart(2,
           '0')%>/<%=post.date.getDate()%>/<%=post.date.getFullYear()%>
         </p>
-
         <button
           type="button"
-          class="btn btn-light btnLike"
+          class="btn btnLike <%- post.likes.some((currentValue) => {return currentValue.user.toString() === locals.user.id.toString()}) ? "btn-success" : "btn-light" %>"
           data-id="<%= post._id%>"
         >
           <i class="fas fa-thumbs-up"></i>

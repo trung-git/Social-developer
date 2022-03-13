@@ -59,6 +59,8 @@ export const likePost = async (id, btn) => {
     });
     if (res.status === 200 && res.statusText === 'OK') {
       document.getElementById(`${id}`).textContent = res.data.length;
+      btn.closest('.btn').classList.remove('btn-light');
+      btn.closest('.btn').classList.add('btn-success');
     }
   } catch (error) {
     // console.log(error.response);
@@ -71,6 +73,8 @@ export const likePost = async (id, btn) => {
         });
         if (resUnLike.status === 200 && resUnLike.statusText === 'OK') {
           document.getElementById(`${id}`).textContent = resUnLike.data.length;
+          btn.closest('.btn').classList.add('btn-light');
+          btn.closest('.btn').classList.remove('btn-success');
         }
       } catch (err) {
         // console.log(err.response);
@@ -97,6 +101,23 @@ export const unlikePost = async (id, btn) => {
     alert('Unlike Fail. Please try again');
   }
 };
+export const deleteCmt = async (idPost, idCmt, btn) => {
+  try {
+    const res = await axios({
+      method: 'DELETE',
+      url: `/api/posts/comment/${idPost.toString().trim()}/${idCmt
+        .toString()
+        .trim()}`,
+    });
+
+    if (res.status === 200 && res.statusText === 'OK') {
+      btn.remove();
+    }
+  } catch (error) {
+    console.log(error.response);
+    alert('Delete Fail. Please try again');
+  }
+};
 export const createComment = async (text, id) => {
   try {
     const res = await axios({
@@ -115,13 +136,42 @@ export const createComment = async (text, id) => {
           'afterbegin',
           `<div class="alert alert-success">Comment successfully</div>`
         );
+      // document.querySelector('.comments').insertAdjacentHTML(
+      //   'afterbegin',
+      //   `<div class="post bg-white p-1 my-1">
+      //     <div>
+      //       <a href="profile.html">
+      //         <img class="round-img" src="${res.data[0].avatar}" alt="" />
+      //         <h4>${res.data[0].name}</h4>
+      //       </a>
+      //     </div>
+      //     <div>
+      //       <p class="my-1">${res.data[0].text}</p>
+      //       <p class="post-date">
+      //         Posted on ${(new Date(res.data[0].date).getMonth() + 1)
+      //           .toString()
+      //           .padStart(2, '0')}/${new Date(
+      //     res.data[0].date
+      //   ).getDate()}/${new Date(res.data[0].date).getFullYear()}
+      //       </p>
+      //       <button
+      //         type="button"
+      //         data-id="${res.data[0]._id}"
+      //         class="btn btn-danger btnDeleteCmt"
+
+      //       >
+      //         <i class="fas fa-times"></i>
+      //       </button>
+      //     </div>
+      //   </div>`
+      // );
 
       window.setTimeout(() => {
         document.querySelector('.alert').remove();
+        location.reload();
       }, 1500);
     }
   } catch (error) {
-    console.log(error);
     document
       .querySelector('.container')
       .insertAdjacentHTML(
@@ -131,24 +181,7 @@ export const createComment = async (text, id) => {
 
     window.setTimeout(() => {
       document.querySelector('.alert').remove();
-      // location.assign('/home');
+      location.reload();
     }, 1500);
-  }
-};
-export const deleteCmt = async (idPost, idCmt, btn) => {
-  try {
-    const res = await axios({
-      method: 'DELETE',
-      url: `/api/posts/comment/${idPost.toString().trim()}/${idCmt
-        .toString()
-        .trim()}`,
-    });
-
-    if (res.status === 200 && res.statusText === 'OK') {
-      btn.remove();
-    }
-  } catch (error) {
-    console.log(error.response);
-    alert('Delete Fail. Please try again');
   }
 };

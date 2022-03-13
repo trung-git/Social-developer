@@ -4,7 +4,7 @@ const btnCreatePost = document.getElementById('btnCreatePost');
 const btnDelete = document.querySelectorAll('.btnDelete');
 const btnLike = document.querySelectorAll('.btnLike');
 const btnSubmitCmt = document.getElementById('btnSubmitCmt');
-const btnDeleteCmt = document.querySelectorAll('.btnDeleteCmt');
+const btnDeleteCmt = document.getElementsByClassName('btnDeleteCmt');
 // Import
 import { login } from './auth.js';
 import {
@@ -13,7 +13,6 @@ import {
   deleteCmt,
   deletePost,
   likePost,
-  unlikePost,
 } from './post.js';
 
 //
@@ -92,10 +91,7 @@ if (btnLike.length > 0) {
     btn.addEventListener('click', async (e) => {
       e.preventDefault();
       const id = btn.dataset.id;
-      // Check this post is like ?
-      // If False -> Like
       await likePost(id, btn);
-      // If True -> Unlike
     });
   });
 }
@@ -103,8 +99,6 @@ if (btnLike.length > 0) {
 if (btnSubmitCmt) {
   btnSubmitCmt.addEventListener('click', async (e) => {
     e.preventDefault();
-    console.log('Click');
-
     const content = document
       .getElementById('txtCmt')
       .value.replace(/\n\r?/g, '<br>');
@@ -126,17 +120,18 @@ if (btnSubmitCmt) {
 }
 
 if (btnDeleteCmt.length > 0) {
-  btnDeleteCmt.forEach((btn) => {
-    btn.addEventListener('click', async (e) => {
-      e.preventDefault();
-
-      if (confirm('Do you want to delete this comment?')) {
-        await deleteCmt(
-          document.getElementById('btnSubmitCmt').dataset.id,
-          btn.dataset.id,
-          btn.closest('.post')
-        );
+  for (let btn of btnDeleteCmt) {
+    btn.addEventListener('click', async function (e) {
+        e.preventDefault();
+        console.log('click');
+        if (confirm('Do you want to delete this comment?')) {
+          await deleteCmt(
+            document.getElementById('btnSubmitCmt').dataset.id,
+            btn.dataset.id,
+            btn.closest('.post')
+          );
+        }
       }
-    });
-  });
+    );
+  }
 }
