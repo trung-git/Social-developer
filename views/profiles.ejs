@@ -4,46 +4,27 @@
     <i class="fab fa-connectdevelop"></i> Browse and connect with developers
   </p>
   <div class="profiles">
+    <% profiles.forEach(p => { %>
     <div class="profile bg-light">
-      <img
-        class="round-img"
-        src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
-        alt=""
-      />
+      <img class="round-img" src="<%= p.user.avatar%>" alt="" />
       <div>
-        <h2>John Doe</h2>
-        <p>Developer at Microsoft</p>
-        <p>Seattle, WA</p>
-        <a href="profile.html" class="btn btn-primary">View Profile</a>
+        <h2><%= p.user.name%></h2>
+        <p><%= p.status %> at <%= p.company %></p>
+        <p><%= p.location %></p>
+        <a href="<%= "/user/"+p.user.id %> " class="btn btn-primary">View Profile</a>
       </div>
 
       <ul>
-        <li class="text-primary"><i class="fas fa-check"></i> HTML</li>
-        <li class="text-primary"><i class="fas fa-check"></i> CSS</li>
+        <% p.skills.forEach(skill => { %>
+        <li class="text-primary"><i class="fas fa-check"></i> <%= skill %></li>
+
+        <% }) %>
+        <!-- <li class="text-primary"><i class="fas fa-check"></i> CSS</li>
         <li class="text-primary"><i class="fas fa-check"></i> JavaScript</li>
         <li class="text-primary"><i class="fas fa-check"></i> Python</li>
-        <li class="text-primary"><i class="fas fa-check"></i> C#</li>
+        <li class="text-primary"><i class="fas fa-check"></i> C#</li> -->
       </ul>
     </div>
-
-    <div class="profile bg-light">
-      <img
-        class="round-img"
-        src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
-        alt=""
-      />
-      <div>
-        <h2>John Doe</h2>
-        <p>Developer at Microsoft</p>
-        <p>Seattle, WA</p>
-        <a href="profile.html" class="btn btn-primary">View Profile</a>
-      </div>
-
-      <ul>
-        <li class="text-primary"><i class="fas fa-check"></i> HTML</li>
-        <li class="text-primary"><i class="fas fa-check"></i> CSS</li>
-        <li class="text-primary"><i class="fas fa-check"></i> JavaScript</li>
-      </ul>
-    </div>
+    <% }); %>
   </div>
 </section>

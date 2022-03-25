@@ -2,7 +2,7 @@
   <a href="/home" class="btn">Back To Posts</a>
   <div class="post bg-white p-1 my-1">
     <div>
-      <a href="profile.html">
+      <a href="<%= "/user/"+post.user %>">
         <img class="round-img" src="<%= post.avatar%>" alt="" />
         <h4><%= post.name%></h4>
       </a>
@@ -39,7 +39,7 @@
     <% if(post.comments){%> <% post.comments.forEach((cmt) =>{ %>
     <div class="post bg-white p-1 my-1">
       <div>
-        <a href="profile.html">
+        <a href="<%= "/user/"+cmt.user %>">
           <img class="round-img" src="<%= cmt.avatar%>" alt="" />
           <h4><%= cmt.name%></h4>
         </a>

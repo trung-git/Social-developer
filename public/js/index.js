@@ -6,6 +6,15 @@ const btnLike = document.querySelectorAll('.btnLike');
 const btnSubmitCmt = document.getElementById('btnSubmitCmt');
 const btnDeleteCmt = document.getElementsByClassName('btnDeleteCmt');
 const btnRegister = document.getElementById('btnRegister');
+const btnCreateProfile = document.getElementById('btnCreateProfile');
+const btnAddExperience = document.getElementById('btnAddExperience');
+const btnAddEducation = document.getElementById('btnAddEducation');
+const btnDeleteExperience = document.getElementsByClassName(
+  'btnDeleteExperience'
+);
+const btnDeleteEducation =
+  document.getElementsByClassName('btnDeleteEducation');
+const btnDeleteAccount = document.getElementById('btnDeleteAccount');
 // Import
 import { login, register } from './auth.js';
 import {
@@ -15,6 +24,14 @@ import {
   deletePost,
   likePost,
 } from './post.js';
+import {
+  addEducation,
+  addExperience,
+  createOrUpdateProfile,
+  deleteAccount,
+  deleteEducation,
+  deleteExperience,
+} from './profile.js';
 
 //
 if (btnLogin) {
@@ -160,6 +177,140 @@ if (btnRegister) {
         document.getElementById('inputEmail').value,
         document.getElementById('inputPassword').value
       );
+    }
+  });
+}
+
+if (btnCreateProfile) {
+  btnCreateProfile.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const status = document.getElementById('status').value;
+    const company = document.getElementById('company').value;
+    const website = document.getElementById('website').value;
+    const location = document.getElementById('location').value;
+    const skills = document.getElementById('skills').value;
+    const githubusername = document.getElementById('githubusername').value;
+    const bio = document.getElementById('bio').value;
+    const twitter = document.getElementById('twitter').value;
+    const facebook = document.getElementById('facebook').value;
+    const youtube = document.getElementById('youtube').value;
+    const linkedin = document.getElementById('linkedin').value;
+    const instagram = document.getElementById('instagram').value;
+    if (status == 0 || !skills) {
+      if (status == 0) {
+        document
+          .querySelector('#status')
+          .insertAdjacentHTML(
+            'afterend',
+            `<div class="alert alert-danger">Please enter your status</div>`
+          );
+        window.setTimeout(() => {
+          document.querySelector('.alert').remove();
+        }, 5000);
+      }
+      if (!skills) {
+        document
+          .querySelector('#skills')
+          .insertAdjacentHTML(
+            'afterend',
+            `<div class="alert alert-danger">Please enter your skills</div>`
+          );
+        window.setTimeout(() => {
+          document.querySelector('.alert').remove();
+        }, 5000);
+      }
+    } else {
+      await createOrUpdateProfile({
+        status,
+        company,
+        website,
+        location,
+        skills,
+        githubusername,
+        bio,
+        twitter,
+        facebook,
+        linkedin,
+        youtube,
+        instagram,
+      });
+    }
+  });
+}
+
+if (btnAddExperience) {
+  btnAddExperience.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const title = document.getElementById('jobTitle').value;
+    const company = document.getElementById('company').value;
+    const location = document.getElementById('location').value;
+    const from = document.getElementById('experienceStart').value;
+    const to = document.getElementById('experienceEnd').value;
+    const isCurrentJob = document.getElementById('isCurrentJob');
+    const description = document.getElementById('jobDescription').value;
+    const data = {
+      title,
+      company,
+      location,
+      from,
+      to,
+      description,
+      current: isCurrentJob.checked,
+    };
+    console.log(data);
+    await addExperience(data);
+  });
+}
+
+if (btnAddEducation) {
+  btnAddEducation.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const data = {
+      school: document.getElementById('school').value,
+      degree: document.getElementById('degree').value,
+      fieldofstudy: document.getElementById('fieldofstudy').value,
+      from: document.getElementById('educationStart').value,
+      to: document.getElementById('educationEnd').value,
+      current: document.getElementById('isCurrentEducation').checked,
+      description: document.getElementById('description').value,
+    };
+    console.log(data);
+    await addEducation(data);
+  });
+}
+
+if (btnDeleteExperience.length > 0) {
+  for (let btn of btnDeleteExperience) {
+    btn.addEventListener('click', async function (e) {
+      e.preventDefault();
+      if (confirm('Do you want to delete this Experience ? ') == true) {
+        await deleteExperience(
+          e.target.dataset.id,
+          btn.parentElement.parentElement
+        );
+      }
+    });
+  }
+}
+if (btnDeleteEducation.length > 0) {
+  for (let btn of btnDeleteEducation) {
+    btn.addEventListener('click', async function (e) {
+      e.preventDefault();
+      if (confirm('Do you want to delete this Education ?') == true) {
+        await deleteEducation(
+          e.target.dataset.id,
+          btn.parentElement.parentElement
+        );
+      }
+    });
+  }
+}
+if (btnDeleteAccount) {
+  btnDeleteAccount.addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    if (confirm('Do you want to delete this Account ?') == true) {
+      await deleteAccount();
     }
   });
 }

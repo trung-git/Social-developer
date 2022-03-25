@@ -1,7 +1,7 @@
-const jwt = require("jsonwebtoken");
-const config = require("config");
-const User = require("../models/User");
-
+const jwt = require('jsonwebtoken');
+const config = require('config');
+const User = require('../models/User');
+const Profile = require('../models/Profile');
 module.exports.auth = async function (req, res, next) {
   // Get token from the header
   // const token = req.header("x-auth-token");
@@ -12,17 +12,17 @@ module.exports.auth = async function (req, res, next) {
   }
   // Check if no token
   if (!token) {
-    return res.status(401).json({ msg: "No token, authorization denied" });
+    return res.status(401).json({ msg: 'No token, authorization denied' });
   }
 
   // Verify token
   try {
-    const decoded = jwt.verify(token, config.get("jwtSecret"));
+    const decoded = jwt.verify(token, config.get('jwtSecret'));
 
     req.user = decoded.user;
     next();
   } catch (err) {
-    res.status(401).json({ msg: "Token is not valid" });
+    res.status(401).json({ msg: 'Token is not valid' });
   }
 };
 module.exports.getUserFromToken = async function (req, res, next) {
@@ -39,7 +39,7 @@ module.exports.getUserFromToken = async function (req, res, next) {
 
   // Verify token
   try {
-    const decoded = jwt.verify(token, config.get("jwtSecret"));
+    const decoded = jwt.verify(token, config.get('jwtSecret'));
     const currentUser = await User.findById(decoded.user.id);
     currentUser.password = undefined;
     req.user = decoded.user;
@@ -51,13 +51,20 @@ module.exports.getUserFromToken = async function (req, res, next) {
 };
 module.exports.navigateUserAfterLogin = async function (req, res, next) {
   if (!req.user) {
-    return res.redirect("/login");
+    return res.redirect('/login');
   }
   next();
 };
 module.exports.navigateUserBeforLogin = async function (req, res, next) {
   if (req.user) {
-    return res.redirect("/home");
+    return res.redirect('/home');
+  }
+  next();
+};
+module.exports.checkUserProfile = async function (req, res, next) {
+  const profile = await Profile.findOne({ user: req.user.id });
+  if (!profile) {
+    return res.redirect('/update-profile');
   }
   next();
 };

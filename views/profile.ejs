@@ -1,0 +1,118 @@
+<section class="container">
+  <a href="/profiles" class="btn btn-light">Back To Profiles</a>
+
+  <div class="profile-grid my-1">
+    <!-- Top -->
+    <div class="profile-top bg-primary p-2">
+      <img class="round-img my-1" src="<%= doc.user.avatar %> " alt="" />
+      <h1 class="large"><%= doc.user.name%></h1>
+      <p class="lead"><%= doc.status %> at <%= doc.company %></p>
+      <p><%= doc.location %></p>
+      <div class="icons my-1">
+        
+        <a href="<%- (doc.social) ? doc.social.twitter : "" %> " target="_blank" rel="noopener noreferrer">
+          <i class="fab fa-twitter fa-2x"></i>
+        </a>
+        <a href="<%- (doc.social) ? doc.social.facebook : "" %> " target="_blank" rel="noopener noreferrer">
+          <i class="fab fa-facebook fa-2x"></i>
+        </a>
+        <a href="<%- (doc.social) ? doc.social.linkedin : "" %> " target="_blank" rel="noopener noreferrer">
+          <i class="fab fa-linkedin fa-2x"></i>
+        </a>
+        <a href="<%- (doc.social) ? doc.social.youtube : "" %> " target="_blank" rel="noopener noreferrer">
+          <i class="fab fa-youtube fa-2x"></i>
+        </a>
+        <a href="<%- (doc.social) ? doc.social.instagram : "" %> " target="_blank" rel="noopener noreferrer">
+          <i class="fab fa-instagram fa-2x"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- About -->
+    <div class="profile-about bg-light p-2">
+      <h2 class="text-primary"><%= doc.user.name %>'s Bio</h2>
+      <p><%= doc.bio %></p>
+      <div class="line"></div>
+      <h2 class="text-primary">Skill Set</h2>
+      <div class="skills">
+        <% doc.skills.forEach(skill => { %>
+
+        <div class="p-1"><i class="fa fa-check"></i> <%= skill %></div>
+        <% }) %>
+      </div>
+    </div>
+    <% const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
+    "Sep", "Oct", "Nov", "Dec"]; %>
+    <!-- Experience -->
+    <div class="profile-exp bg-white p-2">
+      <h2 class="text-primary">Experience</h2>
+      <% doc.experience.forEach(ex => { %>
+      <div>
+        <h3 class="text-dark"><%= ex.company %></h3>
+        <p>
+          <%= months[ex.from.getMonth()] %> <%= ex.from.getFullYear().toString()
+          %> - <%- (ex.current === true) ? "Current" : months[ex.to.getMonth()]
+          +" "+ ex.from.getFullYear().toString() %>
+        </p>
+        <p><strong>Position: </strong><%= ex.title %></p>
+        <p><strong>Description: </strong><%= ex.description %></p>
+      </div>
+      <% }) %>
+    </div>
+
+    <!-- Education -->
+    <div class="profile-edu bg-white p-2">
+      <h2 class="text-primary">Education</h2>
+      <% doc.education.forEach(ed => { %>
+      <div>
+        <h3><%= ed.school %></h3>
+        <p>
+          <%= months[ed.from.getMonth()] %> <%= ed.from.getFullYear().toString()
+          %> - <%- (ed.current === true) ? "Current" : months[ed.to.getMonth()]
+          +" "+ ed.from.getFullYear().toString() %>
+        </p>
+        <p><strong>Degree: </strong><%= ed.degree %></p>
+        <p><strong>Field Of Study: </strong><%= ed.fieldofstudy %></p>
+        <p><strong>Description: </strong><%= ed.description %></p>
+      </div>
+      <% }) %>
+    </div>
+
+    <!-- Github -->
+    <div class="profile-github">
+      <h2 class="text-primary my-1">
+        <i class="fab fa-github"></i> Github Repos
+      </h2>
+
+      <% github.forEach((hub) => { %>
+      <div class="repo bg-white p-1 my-1">
+        <div>
+          <h4>
+            <a
+              href="<%= hub.html_url %> "
+              target="_blank"
+              rel="noopener noreferrer"
+              ><%= hub.name %>
+            </a>
+          </h4>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat,
+            laborum!
+          </p>
+        </div>
+        <div>
+          <ul>
+            <li class="badge badge-primary">
+              Stars: <%= hub.stargazers_count %>
+            </li>
+            <li class="badge badge-dark">
+              Watchers: <%= hub.watchers_count %>
+            </li>
+            <li class="badge badge-light">Forks: <%= hub.forks_count %></li>
+          </ul>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</section>

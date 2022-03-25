@@ -55,11 +55,11 @@ export const register = async (name, email, password) => {
         );
 
       window.setTimeout(() => {
-        location.assign('/home');
+        location.assign('/update-profile');
       }, 1500);
     }
   } catch (error) {
-    console.log(error.response.data);
+    // console.log(error.response.data);
     error.response.data.errors.forEach((mes) => {
       document
         .querySelector('.container')
