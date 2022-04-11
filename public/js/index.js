@@ -17,6 +17,7 @@ const btnDeleteEducation =
 const btnDeleteAccount = document.getElementById('btnDeleteAccount');
 // Import
 import { login, register } from './auth.js';
+import { Confirm } from './comfirmation.js';
 import {
   createComment,
   createPost,
@@ -101,9 +102,16 @@ if (btnDelete.length > 0) {
   btnDelete.forEach((btn) => {
     btn.addEventListener('click', async (e) => {
       e.preventDefault();
-      if (confirm('Do you want to delete this post?')) {
-        await deletePost(btn.dataset.id, btn.closest('.post'));
-      }
+      Confirm.open({
+        title: `Fodev - ${document.querySelector('#name-of-user').textContent}`,
+        message: 'Do you want to delete this post ?',
+        onok: async () => {
+          await deletePost(btn.dataset.id, btn.closest('.post'));
+        },
+      });
+      // if (confirm('Do you want to delete this post?')) {
+      //   await deletePost(btn.dataset.id, btn.closest('.post'));
+      // }
     });
   });
 }
@@ -145,14 +153,24 @@ if (btnDeleteCmt.length > 0) {
   for (let btn of btnDeleteCmt) {
     btn.addEventListener('click', async function (e) {
       e.preventDefault();
-      console.log('click');
-      if (confirm('Do you want to delete this comment?')) {
-        await deleteCmt(
-          document.getElementById('btnSubmitCmt').dataset.id,
-          btn.dataset.id,
-          btn.closest('.post')
-        );
-      }
+      Confirm.open({
+        title: `Fodev - ${document.querySelector('#name-of-user').textContent}`,
+        message: 'Do you want to delete this comment ?',
+        onok: async () => {
+          await deleteCmt(
+            document.getElementById('btnSubmitCmt').dataset.id,
+            btn.dataset.id,
+            btn.closest('.post')
+          );
+        },
+      });
+      // if (confirm('Do you want to delete this comment?')) {
+      //   await deleteCmt(
+      //     document.getElementById('btnSubmitCmt').dataset.id,
+      //     btn.dataset.id,
+      //     btn.closest('.post')
+      //   );
+      // }
     });
   }
 }
@@ -290,12 +308,22 @@ if (btnDeleteExperience.length > 0) {
   for (let btn of btnDeleteExperience) {
     btn.addEventListener('click', async function (e) {
       e.preventDefault();
-      if (confirm('Do you want to delete this Experience ? ') == true) {
-        await deleteExperience(
-          e.target.dataset.id,
-          btn.parentElement.parentElement
-        );
-      }
+      Confirm.open({
+        title: `Fodev - ${document.querySelector('#name-of-user').textContent}`,
+        message: 'Do you want to delete this Experience ?',
+        onok: async () => {
+          await deleteExperience(
+            e.target.dataset.id,
+            btn.parentElement.parentElement
+          );
+        },
+      });
+      // if (confirm('Do you want to delete this Experience ? ') == true) {
+      //   await deleteExperience(
+      //     e.target.dataset.id,
+      //     btn.parentElement.parentElement
+      //   );
+      // }
     });
   }
 }
@@ -303,21 +331,37 @@ if (btnDeleteEducation.length > 0) {
   for (let btn of btnDeleteEducation) {
     btn.addEventListener('click', async function (e) {
       e.preventDefault();
-      if (confirm('Do you want to delete this Education ?') == true) {
-        await deleteEducation(
-          e.target.dataset.id,
-          btn.parentElement.parentElement
-        );
-      }
+      Confirm.open({
+        title: `Fodev - ${document.querySelector('#name-of-user').textContent}`,
+        message: 'Do you want to delete this Education ?',
+        onok: async () => {
+          await deleteEducation(
+            e.target.dataset.id,
+            btn.parentElement.parentElement
+          );
+        },
+      });
+      // if (confirm('Do you want to delete this Education ?') == true) {
+      //   await deleteEducation(
+      //     e.target.dataset.id,
+      //     btn.parentElement.parentElement
+      //   );
+      // }
     });
   }
 }
 if (btnDeleteAccount) {
   btnDeleteAccount.addEventListener('click', async (e) => {
     e.preventDefault();
-
-    if (confirm('Do you want to delete this Account ?') == true) {
-      await deleteAccount();
-    }
+    Confirm.open({
+      title: `Fodev - ${document.querySelector('#name-of-user').textContent}`,
+      message: 'Do you want to delete this Account ?',
+      onok: async () => {
+        await deleteAccount();
+      },
+    });
+    // if (confirm('Do you want to delete this Account ?') == true) {
+    //   await deleteAccount();
+    // }
   });
 }
