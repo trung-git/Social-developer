@@ -1,3 +1,5 @@
+import { dangerAlert, successAlert } from './snackbar.js';
+
 export const createPost = async (text) => {
   try {
     const res = await axios({
@@ -10,31 +12,36 @@ export const createPost = async (text) => {
 
     if (res.status === 200 && res.statusText === 'OK') {
       document.getElementById('txtContentPost').textContent = '';
-
-      document
-        .querySelector('.container')
-        .insertAdjacentHTML(
-          'afterbegin',
-          `<div class="alert alert-success">Post successfully</div>`
-        );
-
-      window.setTimeout(() => {
-        document.querySelector('.alert').remove();
+      successAlert('Post successfully', () => {
         location.assign('/home');
-      }, 1500);
+      });
+      // document
+      //   .querySelector('.container')
+      //   .insertAdjacentHTML(
+      //     'afterbegin',
+      //     `<div class="alert alert-success">Post successfully</div>`
+      //   );
+
+      // window.setTimeout(() => {
+      //   document.querySelector('.alert').remove();
+      //   location.assign('/home');
+      // }, 1500);
     }
   } catch (error) {
-    document
-      .querySelector('.container')
-      .insertAdjacentHTML(
-        'afterbegin',
-        `<div class="alert alert-danger">Something went wrong!</div>`
-      );
-
-    window.setTimeout(() => {
-      document.querySelector('.alert').remove();
+    dangerAlert('Something went wrong!', () => {
       location.assign('/home');
-    }, 1500);
+    });
+    // document
+    //   .querySelector('.container')
+    //   .insertAdjacentHTML(
+    //     'afterbegin',
+    //     `<div class="alert alert-danger">Something went wrong!</div>`
+    //   );
+
+    // window.setTimeout(() => {
+    //   document.querySelector('.alert').remove();
+    //   location.assign('/home');
+    // }, 1500);
   }
 };
 export const deletePost = async (id, btn) => {
@@ -45,10 +52,12 @@ export const deletePost = async (id, btn) => {
     });
 
     if (res.status === 200 && res.statusText === 'OK') {
+      successAlert('Delete post successfully');
       btn.remove();
     }
   } catch (error) {
-    alert('Delete Fail. Please try again');
+    dangerAlert('Delete Fail. Please try again');
+    // alert('Delete Fail. Please try again');
   }
 };
 export const likePost = async (id, btn) => {
@@ -78,10 +87,13 @@ export const likePost = async (id, btn) => {
         }
       } catch (err) {
         // console.log(err.response);
-        alert('Unlike Fail. Please try again');
+        dangerAlert('Unlike Fail. Please try again');
+
+        // alert('Unlike Fail. Please try again');
       }
     } else {
-      alert('Like Fail. Please try again');
+      // alert('Like Fail. Please try again');
+      dangerAlert('Like Fail. Please try again');
     }
   }
 };
@@ -97,8 +109,9 @@ export const unlikePost = async (id, btn) => {
       btn.classList.add('btn-danger');
     }
   } catch (error) {
-    console.log(error);
-    alert('Unlike Fail. Please try again');
+    // console.log(error);
+
+    dangerAlert('Unlike Fail. Please try again');
   }
 };
 export const deleteCmt = async (idPost, idCmt, btn) => {
@@ -111,11 +124,12 @@ export const deleteCmt = async (idPost, idCmt, btn) => {
     });
 
     if (res.status === 200 && res.statusText === 'OK') {
+      successAlert('Delete comment successfully');
       btn.remove();
     }
   } catch (error) {
-    console.log(error.response);
-    alert('Delete Fail. Please try again');
+    // console.log(error.response);
+    dangerAlert('Delete Fail. Please try again');
   }
 };
 export const createComment = async (text, id) => {
@@ -130,58 +144,35 @@ export const createComment = async (text, id) => {
 
     if (res.status === 200 && res.statusText === 'OK') {
       document.getElementById('txtCmt').value = '';
-      document
-        .querySelector('.container')
-        .insertAdjacentHTML(
-          'afterbegin',
-          `<div class="alert alert-success">Comment successfully</div>`
-        );
-      // document.querySelector('.comments').insertAdjacentHTML(
-      //   'afterbegin',
-      //   `<div class="post bg-white p-1 my-1">
-      //     <div>
-      //       <a href="profile.html">
-      //         <img class="round-img" src="${res.data[0].avatar}" alt="" />
-      //         <h4>${res.data[0].name}</h4>
-      //       </a>
-      //     </div>
-      //     <div>
-      //       <p class="my-1">${res.data[0].text}</p>
-      //       <p class="post-date">
-      //         Posted on ${(new Date(res.data[0].date).getMonth() + 1)
-      //           .toString()
-      //           .padStart(2, '0')}/${new Date(
-      //     res.data[0].date
-      //   ).getDate()}/${new Date(res.data[0].date).getFullYear()}
-      //       </p>
-      //       <button
-      //         type="button"
-      //         data-id="${res.data[0]._id}"
-      //         class="btn btn-danger btnDeleteCmt"
-
-      //       >
-      //         <i class="fas fa-times"></i>
-      //       </button>
-      //     </div>
-      //   </div>`
-      // );
-
-      window.setTimeout(() => {
-        document.querySelector('.alert').remove();
+      successAlert('Comment successfully', () => {
         location.reload();
-      }, 1500);
+      });
+      // document
+      //   .querySelector('.container')
+      //   .insertAdjacentHTML(
+      //     'afterbegin',
+      //     `<div class="alert alert-success">Comment successfully</div>`
+      //   );
+
+      // window.setTimeout(() => {
+      //   document.querySelector('.alert').remove();
+      //   location.reload();
+      // }, 1500);
     }
   } catch (error) {
-    document
-      .querySelector('.container')
-      .insertAdjacentHTML(
-        'afterbegin',
-        `<div class="alert alert-danger">Something went wrong!</div>`
-      );
-
-    window.setTimeout(() => {
-      document.querySelector('.alert').remove();
+    dangerAlert('Something went wrong!', () => {
       location.reload();
-    }, 1500);
+    });
+    // document
+    //   .querySelector('.container')
+    //   .insertAdjacentHTML(
+    //     'afterbegin',
+    //     `<div class="alert alert-danger">Something went wrong!</div>`
+    //   );
+
+    // window.setTimeout(() => {
+    //   document.querySelector('.alert').remove();
+    //   location.reload();
+    // }, 1500);
   }
 };

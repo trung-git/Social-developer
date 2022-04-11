@@ -123,24 +123,27 @@ router.get(`/user/:id`, async (req, res) => {
     const profiles = Profile.findOne({ user: req.params.id });
     profiles.populate({ path: 'user', select: '-password' });
     const doc = await profiles;
-    // console.log(doc);
-    if (doc.githubusername & (doc.githubusername !== '')) {
+    // console.log(doc.githubusername);
+    if (doc.githubusername.length > 0) {
+      // console.log('USERRRRR');
+
       axios
         .get(
           `http://localhost:3000/api/profiles/github/${doc.githubusername.trim()}`
         )
         .then(function (response) {
           // handle success
+
           console.log(response.data);
           return res.render('profile', { doc, github: response.data });
         })
         .catch(function (error) {
           // handle error
           console.log(error);
-          res.send('400 - Not found');
+          return res.render('profile', { doc, github: [] });
         });
     } else {
-      res.render('profile', { doc, github: [] });
+      return res.render('profile', { doc, github: [] });
     }
   } catch (error) {
     console.log(error);

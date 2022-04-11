@@ -1,3 +1,5 @@
+import { dangerAlert, successAlert } from './snackbar.js';
+
 export const login = async (email, password) => {
   try {
     const res = await axios({
@@ -10,26 +12,30 @@ export const login = async (email, password) => {
     });
 
     if (res.status === 200 && res.statusText === 'OK') {
-      document
-        .querySelector('.container')
-        .insertAdjacentHTML(
-          'afterbegin',
-          `<div class="alert alert-success">Login successfully</div>`
-        );
+      // document
+      //   .querySelector('.container')
+      //   .insertAdjacentHTML(
+      //     'afterbegin',
+      //     `<div class="alert alert-success">Login successfully</div>`
+      //   );
 
-      window.setTimeout(() => {
+      // window.setTimeout(() => {
+      //   location.assign('/home');
+      // }, 1500);
+      successAlert('Login successfully', () => {
         location.assign('/home');
-      }, 1500);
+      });
     }
   } catch (error) {
     // console.log(error.response.data);
     error.response.data.errors.forEach((mes) => {
-      document
-        .querySelector('.container')
-        .insertAdjacentHTML(
-          'afterbegin',
-          `<div class="alert alert-danger">${mes.msg}</div>`
-        );
+      dangerAlert(mes.msg);
+      // document
+      //   .querySelector('.container')
+      //   .insertAdjacentHTML(
+      //     'afterbegin',
+      //     `<div class="alert alert-danger">${mes.msg}</div>`
+      //   );
     });
   }
 };
@@ -47,31 +53,35 @@ export const register = async (name, email, password) => {
     });
 
     if (res.status === 200 && res.statusText === 'OK') {
-      document
-        .querySelector('.container')
-        .insertAdjacentHTML(
-          'afterbegin',
-          `<div class="alert alert-success">Register successfully</div>`
-        );
+      // document
+      //   .querySelector('.container')
+      //   .insertAdjacentHTML(
+      //     'afterbegin',
+      //     `<div class="alert alert-success">Register successfully</div>`
+      //   );
 
-      window.setTimeout(() => {
+      // window.setTimeout(() => {
+      //   location.assign('/update-profile');
+      // }, 1500);
+      successAlert('Register successfully', () => {
         location.assign('/update-profile');
-      }, 1500);
+      });
     }
   } catch (error) {
     // console.log(error.response.data);
     error.response.data.errors.forEach((mes) => {
-      document
-        .querySelector('.container')
-        .insertAdjacentHTML(
-          'afterbegin',
-          `<div class="alert alert-danger">${mes.msg}</div>`
-        );
+      dangerAlert(mes.msg);
+      // document
+      //   .querySelector('.container')
+      //   .insertAdjacentHTML(
+      //     'afterbegin',
+      //     `<div class="alert alert-danger">${mes.msg}</div>`
+      //   );
     });
-    window.setTimeout(() => {
-      document.querySelectorAll('.alert').forEach((alert) => {
-        alert.remove();
-      });
-    }, 5000);
+    // window.setTimeout(() => {
+    //   document.querySelectorAll('.alert').forEach((alert) => {
+    //     alert.remove();
+    //   });
+    // }, 5000);
   }
 };

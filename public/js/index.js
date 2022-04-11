@@ -32,6 +32,7 @@ import {
   deleteEducation,
   deleteExperience,
 } from './profile.js';
+import { successAlert, dangerAlert } from './snackbar.js';
 
 //
 if (btnLogin) {
@@ -40,13 +41,13 @@ if (btnLogin) {
     const email = document.getElementById('login-username').value;
     const password = document.getElementById('login-password').value;
     //
-    function removeAlert() {
-      document.querySelectorAll('.alert').forEach(function (node) {
-        node.parentNode.removeChild(node);
-      });
-    }
-    document.getElementById('login-username').onfocus = removeAlert;
-    document.getElementById('login-password').onfocus = removeAlert;
+    // function removeAlert() {
+    //   document.querySelectorAll('.alert').forEach(function (node) {
+    //     node.parentNode.removeChild(node);
+    //   });
+    // }
+    // document.getElementById('login-username').onfocus = removeAlert;
+    // document.getElementById('login-password').onfocus = removeAlert;
 
     // Validate Input
     const errorMessage = [];
@@ -59,12 +60,13 @@ if (btnLogin) {
       errorMessage.unshift('Please enter a valid password');
     }
     if (errorMessage.length > 0) {
-      const container = document.querySelector('.container');
+      // const container = document.querySelector('.container');
       errorMessage.forEach((mes) => {
-        container.insertAdjacentHTML(
-          'afterbegin',
-          `<div class="alert alert-danger">${mes}</div>`
-        );
+        // container.insertAdjacentHTML(
+        //   'afterbegin',
+        //   `<div class="alert alert-danger">${mes}</div>`
+        // );
+        dangerAlert(mes);
       });
     } else {
       // Login execute
@@ -80,15 +82,16 @@ if (btnCreatePost) {
       .getElementById('txtContentPost')
       .value.replace(/\n\r?/g, '<br>');
     if (!content) {
-      document
-        .querySelector('.container')
-        .insertAdjacentHTML(
-          'afterbegin',
-          `<div class="alert alert-danger">Please fill out and try again</div>`
-        );
-      window.setTimeout(() => {
-        document.querySelector('.alert').remove();
-      }, 1500);
+      dangerAlert('Please fill out and try again');
+      // document
+      //   .querySelector('.container')
+      //   .insertAdjacentHTML(
+      //     'afterbegin',
+      //     `<div class="alert alert-danger">Please fill out and try again</div>`
+      //   );
+      // window.setTimeout(() => {
+      //   document.querySelector('.alert').remove();
+      // }, 1500);
     } else {
       await createPost(content);
     }
@@ -122,15 +125,16 @@ if (btnSubmitCmt) {
       .value.replace(/\n\r?/g, '<br>');
     const id = btnSubmitCmt.dataset.id;
     if (!content) {
-      document
-        .querySelector('.container')
-        .insertAdjacentHTML(
-          'afterbegin',
-          `<div class="alert alert-danger">Please fill out and try again</div>`
-        );
-      window.setTimeout(() => {
-        document.querySelector('.alert').remove();
-      }, 1500);
+      dangerAlert('Please fill out and try again');
+      // document
+      //   .querySelector('.container')
+      //   .insertAdjacentHTML(
+      //     'afterbegin',
+      //     `<div class="alert alert-danger">Please fill out and try again</div>`
+      //   );
+      // window.setTimeout(() => {
+      //   document.querySelector('.alert').remove();
+      // }, 1500);
     } else {
       await createComment(content, id);
     }
@@ -161,15 +165,16 @@ if (btnRegister) {
       document.getElementById('inputPassword').value !==
       document.getElementById('inputConfirmPassword').value
     ) {
-      document
-        .querySelector('.container')
-        .insertAdjacentHTML(
-          'afterbegin',
-          `<div class="alert alert-danger">Passwords are not the same</div>`
-        );
-      window.setTimeout(() => {
-        document.querySelector('.alert').remove();
-      }, 5000);
+      dangerAlert('Passwords are not the same');
+      // document
+      //   .querySelector('.container')
+      //   .insertAdjacentHTML(
+      //     'afterbegin',
+      //     `<div class="alert alert-danger">Passwords are not the same</div>`
+      //   );
+      // window.setTimeout(() => {
+      //   document.querySelector('.alert').remove();
+      // }, 5000);
     } else {
       // Goi API
       await register(
@@ -198,26 +203,28 @@ if (btnCreateProfile) {
     const instagram = document.getElementById('instagram').value;
     if (status == 0 || !skills) {
       if (status == 0) {
-        document
-          .querySelector('#status')
-          .insertAdjacentHTML(
-            'afterend',
-            `<div class="alert alert-danger">Please enter your status</div>`
-          );
-        window.setTimeout(() => {
-          document.querySelector('.alert').remove();
-        }, 5000);
+        dangerAlert('Please enter your status');
+        //   document
+        //     .querySelector('#status')
+        //     .insertAdjacentHTML(
+        //       'afterend',
+        //       `<div class="alert alert-danger">Please enter your status</div>`
+        //     );
+        //   window.setTimeout(() => {
+        //     document.querySelector('.alert').remove();
+        //   }, 5000);
       }
       if (!skills) {
-        document
-          .querySelector('#skills')
-          .insertAdjacentHTML(
-            'afterend',
-            `<div class="alert alert-danger">Please enter your skills</div>`
-          );
-        window.setTimeout(() => {
-          document.querySelector('.alert').remove();
-        }, 5000);
+        dangerAlert('Please enter your skills');
+        // document
+        //   .querySelector('#skills')
+        //   .insertAdjacentHTML(
+        //     'afterend',
+        //     `<div class="alert alert-danger">Please enter your skills</div>`
+        //   );
+        // window.setTimeout(() => {
+        //   document.querySelector('.alert').remove();
+        // }, 5000);
       }
     } else {
       await createOrUpdateProfile({
@@ -274,7 +281,7 @@ if (btnAddEducation) {
       current: document.getElementById('isCurrentEducation').checked,
       description: document.getElementById('description').value,
     };
-    console.log(data);
+    // console.log(data);
     await addEducation(data);
   });
 }
