@@ -3,7 +3,7 @@
   <div class="post bg-white p-1 my-1">
     <div>
       <a href="<%= "/user/"+post.user %>">
-        <img class="round-img" src="<%= post.avatar%>" alt="" />
+        <img crossorigin="anonymous" class="round-img" src="<%= post.avatar%>" alt="" />
         <h4><%= post.name%></h4>
       </a>
     </div>
@@ -40,7 +40,7 @@
     <div class="post bg-white p-1 my-1">
       <div>
         <a href="<%= "/user/"+cmt.user %>">
-          <img class="round-img" src="<%= cmt.avatar%>" alt="" />
+          <img crossorigin="anonymous" class="round-img" src="<%= cmt.avatar%>" alt="" />
           <h4><%= cmt.name%></h4>
         </a>
       </div>

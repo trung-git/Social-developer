@@ -124,7 +124,7 @@ router.get(`/user/:id`, async (req, res) => {
     profiles.populate({ path: 'user', select: '-password' });
     const doc = await profiles;
     // console.log(doc.githubusername);
-    if (doc.githubusername.length > 0) {
+    if (doc.githubusername?.length > 0) {
       // console.log('USERRRRR');
 
       axios

@@ -27,7 +27,7 @@ export const login = async (email, password) => {
       });
     }
   } catch (error) {
-    // console.log(error.response.data);
+    console.log(error);
     error.response.data.errors.forEach((mes) => {
       dangerAlert(mes.msg);
       // document
