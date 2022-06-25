@@ -22,8 +22,121 @@
   <body>
     <%-include("../partials/navbar.ejs")%>
     <!--  -->
+
     <%-body%>
     <div id="snackbar-container"></div>
+
+    <!-- The Modal - post -->
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="close">&times;</span>
+          <h2>Edit post <span id="modal-name">- Huynh Thanh Trung</span></h2>
+        </div>
+        <div class="modal-body">
+          <form class="form my-1">
+            <textarea
+              id="modal-text"
+              name="text"
+              cols="30"
+              rows="5"
+              required
+            ></textarea>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button id="btn-modal-save" type="button" class="btn btn-primary">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+    <!--  -->
+
+    <!-- The Modal - comment -->
+    <div id="myModalcmt" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="close closecmt">&times;</span>
+          <h2>
+            Edit comment <span id="modalcmt-name">- Huynh Thanh Trung</span>
+          </h2>
+        </div>
+        <div class="modal-body">
+          <form class="form my-1">
+            <textarea
+              id="modalcmt-text"
+              name="text"
+              cols="30"
+              rows="5"
+              required
+            ></textarea>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button id="btn-modalcmt-save" type="button" class="btn btn-primary">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+    <!--  -->
+
+    <!-- The Modal - changep password -->
+    <div id="myModalcpw" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="close closecmt closecpw">&times;</span>
+          <h2>
+            Change Password <span id="modalcpw-name">- Huynh Thanh Trung</span>
+          </h2>
+        </div>
+        <div class="modal-body modal-body-cpw">
+          Current Password
+          <div class="form-group">
+            <input
+              class="form-cpw"
+              type="password"
+              placeholder="Current Password"
+              name="currentPassword"
+              id="currentPassword"
+              required
+            />
+          </div>
+          New Password
+          <div class="form-group">
+            <input
+              class="form-cpw"
+              type="password"
+              placeholder="New Password"
+              name="newPassword"
+              id="newPassword"
+              required
+            />
+          </div>
+          Confirm Password
+          <div class="form-group">
+            <input
+              class="form-cpw"
+              type="password"
+              placeholder="Confirm Password"
+              name="confirmPassword"
+              id="confirmPassword"
+              required
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="btn-modalcpw-save" type="button" class="btn btn-primary">
+            Update Password
+          </button>
+        </div>
+      </div>
+    </div>
+    <!--  -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
     <script type="module" src="/js/index.js"></script>

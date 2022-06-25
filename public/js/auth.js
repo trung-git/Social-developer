@@ -85,3 +85,31 @@ export const register = async (name, email, password) => {
     // }, 5000);
   }
 };
+
+export const updatePassword = async (password, newPassword) => {
+  try {
+    const res = await axios({
+      method: 'PATCH',
+      url: '/api/auth/update-password',
+      data: {
+        password,
+        newPassword,
+      },
+    });
+
+    if (res.status === 200 && res.statusText === 'OK') {
+      successAlert('Update password successfully');
+      // xoa input
+      document.querySelector('#currentPassword').value = '';
+      document.querySelector('#newPassword').value = '';
+      document.querySelector('#confirmPassword').value = '';
+      // tat modal
+      document.getElementById('myModalcpw').style.display = 'none';
+    }
+  } catch (error) {
+    console.log(error.response.data);
+    error.response.data.errors.forEach((mes) => {
+      dangerAlert(mes.msg);
+    });
+  }
+};

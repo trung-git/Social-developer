@@ -53,6 +53,17 @@
         <% if (cmt.user.toString() === locals.user.id.toString()) { %>
         <button
           type="button"
+          class="btn btn-primary open-cmtmodal"
+          data-id="<%=cmt._id%>"
+          data-name="<%=cmt.name%>"
+          data-text="<%=cmt.text%>"
+          data-cmtid="<%=post._id%>"
+        >
+          <i class="fas fa-edit"></i>
+        </button>
+        
+        <button
+          type="button"
           data-id="<%=cmt._id%>"
           class="btn btn-danger btnDeleteCmt"
         >

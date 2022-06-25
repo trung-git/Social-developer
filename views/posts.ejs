@@ -57,6 +57,15 @@
         <%if (post.user.toString() === locals.user.id.toString()){%>
         <button
           type="button"
+          class="btn btn-primary open-modal"
+          data-id="<%=post._id%>"
+          data-name="<%=post.name%>"
+          data-text="<%=post.text%>"
+        >
+          <i class="fas fa-edit"></i>
+        </button>
+        <button
+          type="button"
           class="btn btn-danger btnDelete"
           data-id="<%=post._id%>"
         >

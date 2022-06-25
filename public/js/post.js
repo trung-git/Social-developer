@@ -44,6 +44,31 @@ export const createPost = async (text) => {
     // }, 1500);
   }
 };
+export const updatePost = async (id, text, p, btn) => {
+  try {
+    const res = await axios({
+      method: 'PATCH',
+      url: `/api/posts/${id}`,
+      data: {
+        text,
+      },
+    });
+
+    if (res.status === 200 && res.statusText === 'OK') {
+      // document.getElementById('txtContentPost').textContent = '';
+      successAlert('Update post successfully');
+      p.innerHTML = text;
+      btn.setAttribute('data-text', text);
+      document.getElementById('myModal').style.display = 'none';
+    }
+  } catch (error) {
+    console.log(error);
+    dangerAlert('Something went wrong!', () => {
+      // location.assign('/home');
+      document.getElementById('myModal').style.display = 'none';
+    });
+  }
+};
 export const deletePost = async (id, btn) => {
   try {
     const res = await axios({
@@ -174,5 +199,28 @@ export const createComment = async (text, id) => {
     //   document.querySelector('.alert').remove();
     //   location.reload();
     // }, 1500);
+  }
+};
+
+export const updateComment = async (id, cmt_id, text, p, btn) => {
+  try {
+    const res = await axios({
+      method: 'PATCH',
+      url: `/api/posts/comment/${id}/${cmt_id}`,
+      data: {
+        text,
+      },
+    });
+
+    if (res.status === 200 && res.statusText === 'OK') {
+      // document.getElementById('txtContentPost').textContent = '';
+      successAlert('Update post successfully');
+      p.innerHTML = text;
+      btn.setAttribute('data-text', text);
+      document.getElementById('myModalcmt').style.display = 'none';
+    }
+  } catch (error) {
+    console.log(error);
+    dangerAlert('Something went wrong!');
   }
 };

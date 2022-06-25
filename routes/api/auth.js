@@ -63,7 +63,7 @@ router.post(
           const cookieOptions = {
             expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
             httpOnly: true,
-            secure: true,
+            // secure: true,
           };
           if (req.secure || req.headers['x-forwarded-proto'] === 'https') {
             cookieOptions.secure = true;
@@ -88,5 +88,31 @@ router.get('/logout', auth, async (req, res) => {
     httpOnly: true,
   });
   res.redirect('/');
+});
+// @route     PATCH api/auth/update-password
+// @desc      Update password
+// @access    Private
+router.patch('/update-password', auth, async (req, res) => {
+  try {
+    //Get user from collection
+    const user = await User.findById(req.user.id).select('+password');
+
+    const isMatched = await bcrypt.compare(req.body.password, user.password);
+    //check if POSTed current password is correct
+    if (!isMatched) {
+      return res.status(400).json({
+        errors: [{ msg: 'Incorrect password' }],
+      });
+    }
+    // Encrypt password
+    const salt = await bcrypt.genSalt(10);
+
+    user.password = await bcrypt.hash(req.body.newPassword, salt);
+    await user.save();
+    return res.status(200).json(user);
+  } catch (err) {
+    console.error(err.message);
+    return res.status(500).send('Server error');
+  }
 });
 module.exports = router;

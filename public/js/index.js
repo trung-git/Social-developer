@@ -15,8 +15,15 @@ const btnDeleteExperience = document.getElementsByClassName(
 const btnDeleteEducation =
   document.getElementsByClassName('btnDeleteEducation');
 const btnDeleteAccount = document.getElementById('btnDeleteAccount');
+const postmodal = document.getElementById('myModal');
+const btnModalSave = document.getElementById('btn-modal-save');
+const cmtmodal = document.getElementById('myModalcmt');
+const btnModalSaveCmt = document.getElementById('btn-modalcmt-save');
+const cpwmodal = document.getElementById('myModalcpw');
+const btnModalSaveCpw = document.getElementById('btn-modalcpw-save');
+
 // Import
-import { login, register } from './auth.js';
+import { login, register, updatePassword } from './auth.js';
 import { Confirm } from './comfirmation.js';
 import {
   createComment,
@@ -24,6 +31,8 @@ import {
   deleteCmt,
   deletePost,
   likePost,
+  updatePost,
+  updateComment,
 } from './post.js';
 import {
   addEducation,
@@ -363,5 +372,195 @@ if (btnDeleteAccount) {
     // if (confirm('Do you want to delete this Account ?') == true) {
     //   await deleteAccount();
     // }
+  });
+}
+
+// Modal
+// Get the modal
+let currentContentPostP = undefined;
+let currentContentPostBtn = undefined;
+if (postmodal) {
+  // Get the <span> element that closes the modal
+  const span = document.getElementsByClassName('close')[0];
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function () {
+    postmodal.style.display = 'none';
+  };
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function (event) {
+    if (event.target == postmodal) {
+      postmodal.style.display = 'none';
+    }
+  };
+  const btn = document.querySelectorAll('.open-modal');
+
+  Array.prototype.forEach.call(btn, function (element) {
+    element.addEventListener('click', function (e) {
+      e.preventDefault();
+
+      document.getElementById(
+        'modal-name'
+      ).value = `- ${e.currentTarget.dataset.name}`;
+      document.getElementById('modal-text').value =
+        e.currentTarget.dataset.text.replace(/<br\s*[\/]?>/gi, '\n');
+
+      document
+        .getElementById('btn-modal-save')
+        .setAttribute('data-id', e.currentTarget.dataset.id);
+
+      postmodal.style.display = 'block';
+      // postmodal.setAttribute("") làm sao để lấy đc id post
+      const parentofSelected = element.parentNode; // gives the parent DIV
+      const children = parentofSelected.children;
+      let p = undefined;
+      for (let child of children) {
+        if (child.classList.contains('my-1')) {
+          p = child;
+          break;
+        }
+      }
+      currentContentPostP = p;
+      currentContentPostBtn = element;
+    });
+  });
+}
+
+if (btnModalSave) {
+  btnModalSave.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const text = document
+      .getElementById('modal-text')
+      .value.replace(/\n\r?/g, '<br>');
+    if (text.trim().length === 0) {
+      dangerAlert('Can not update post with empty content !');
+    } else {
+      try {
+        await updatePost(
+          e.currentTarget.dataset.id,
+          text,
+          currentContentPostP,
+          currentContentPostBtn
+        );
+      } catch (error) {
+        console.log(error);
+        dangerAlert('Some thing went wrong, Please try again !');
+      }
+    }
+  });
+}
+
+let currentContentCmtP = undefined;
+let currentContentCmtBtn = undefined;
+let currentPostId = undefined;
+if (cmtmodal) {
+  // Get the <span> element that closes the modal
+  const span = document.getElementsByClassName('closecmt')[0];
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function () {
+    cmtmodal.style.display = 'none';
+  };
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function (event) {
+    if (event.target == cmtmodal) {
+      cmtmodal.style.display = 'none';
+    }
+  };
+  const btn = document.querySelectorAll('.open-cmtmodal');
+
+  Array.prototype.forEach.call(btn, function (element) {
+    element.addEventListener('click', function (e) {
+      e.preventDefault();
+
+      document.getElementById(
+        'modalcmt-name'
+      ).value = `- ${e.currentTarget.dataset.name}`;
+      document.getElementById('modalcmt-text').value =
+        e.currentTarget.dataset.text.replace(/<br\s*[\/]?>/gi, '\n');
+
+      document
+        .getElementById('btn-modalcmt-save')
+        .setAttribute('data-id', e.currentTarget.dataset.id);
+
+      cmtmodal.style.display = 'block';
+
+      const parentofSelected = element.parentNode; // gives the parent DIV
+      const children = parentofSelected.children;
+      let p = undefined;
+      for (let child of children) {
+        if (child.classList.contains('my-1')) {
+          p = child;
+          break;
+        }
+      }
+      currentContentCmtP = p;
+      currentContentCmtBtn = element;
+      currentPostId = e.currentTarget.dataset.cmtid;
+    });
+  });
+}
+
+if (btnModalSaveCmt) {
+  btnModalSaveCmt.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const text = document
+      .getElementById('modalcmt-text')
+      .value.replace(/\n\r?/g, '<br>');
+    if (text.trim().length === 0) {
+      dangerAlert('Can not update comment with empty content !');
+    } else {
+      try {
+        await updateComment(
+          currentPostId,
+          e.currentTarget.dataset.id,
+          text,
+          currentContentCmtP,
+          currentContentCmtBtn
+        );
+      } catch (error) {
+        console.log(error);
+        dangerAlert('Some thing went wrong, Please try again !');
+      }
+    }
+  });
+}
+
+if (cpwmodal) {
+  // Get the <span> element that closes the modal
+  const span = document.querySelector('.closecpw');
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function () {
+    cpwmodal.style.display = 'none';
+  };
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function (event) {
+    if (event.target == cpwmodal) {
+      cpwmodal.style.display = 'none';
+    }
+  };
+  const btn = document.querySelector('#btnChangePassword');
+  if (btn) {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      cpwmodal.style.display = 'block';
+    });
+  }
+}
+if (btnModalSaveCpw) {
+  btnModalSaveCpw.addEventListener('click', async (e) => {
+    const crtPass = document.querySelector('#currentPassword').value;
+    const newPass = document.querySelector('#newPassword').value;
+    const cfmPass = document.querySelector('#confirmPassword').value;
+    if (newPass !== cfmPass) {
+      console.log('khach');
+      dangerAlert('Confirm Password is not match with new password');
+    } else {
+      try {
+        // Goi api update password
+        await updatePassword(crtPass, cfmPass);
+      } catch (error) {
+        console.log(error);
+        dangerAlert('Some thing went wrong, Please try again !');
+      }
+    }
   });
 }

@@ -239,13 +239,27 @@ img {
 .form .form-group {
   margin: 1.2rem 0;
 }
-
+.form-cpw {
+  width: 100%;
+  height: 38px;
+  padding: 12px 12px;
+  margin: 6px auto;
+  border-radius: 15px;
+  border: 2px solid #1313133f;
+  font-size: 1rem;
+}
+.form-cpw:focus {
+  outline-color: var(--primary-color);
+}
 .form .form-text {
   display: block;
   margin-top: 0.3rem;
   color: #888;
 }
-
+#btn-modalcpw-save {
+  margin-top: 8px;
+  margin-right: 0;
+}
 .form input[type='text'],
 .form input[type='email'],
 .form input[type='password'],
@@ -495,12 +509,14 @@ button {
   position: fixed;
   bottom: 0px;
   left: 50%;
+  transform: translate(-50%, 0);
+  z-index: 100;
 }
 
 .snackbar {
   visibility: hidden;
   min-width: 250px;
-  margin-left: -125px;
+  /* margin-left: -125px; */
   background-color: #333;
   margin-bottom: 20px;
   color: #fff;
@@ -762,6 +778,99 @@ button {
 
 .confirm__button:focus {
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+/* Modal */
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 200px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #888;
+  width: 50%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s;
+  border-radius: 16px;
+  overflow: auto;
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 8px 16px;
+  background-color: #17a2b8;
+  color: white;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+}
+
+.modal-body {
+  padding: 2px 16px;
+}
+.modal-body-cpw {
+  margin-top: 10px;
+}
+.modal-footer {
+  padding: 2px 16px 14px;
+  /* background-color: #17a2b8; */
+  color: white;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+  float: right;
 }
 
 @keyframes confirm---open {

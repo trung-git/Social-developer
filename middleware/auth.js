@@ -6,7 +6,6 @@ module.exports.auth = async function (req, res, next) {
   // Get token from the header
   // const token = req.header("x-auth-token");
   let token;
-
   if (req.cookies.jwt) {
     token = req.cookies.jwt;
   }
