@@ -12,6 +12,7 @@ const btnAddEducation = document.getElementById('btnAddEducation');
 const btnDeleteExperience = document.getElementsByClassName(
   'btnDeleteExperience'
 );
+const logoutBtn = document.querySelector('#logoutBtn');
 const btnDeleteEducation =
   document.getElementsByClassName('btnDeleteEducation');
 const btnDeleteAccount = document.getElementById('btnDeleteAccount');
@@ -42,9 +43,71 @@ import {
   deleteEducation,
   deleteExperience,
 } from './profile.js';
-import { successAlert, dangerAlert } from './snackbar.js';
+import { successAlert, dangerAlert, toast } from './snackbar.js';
 
+const origin = window.location.origin;
+const socket = io.connect(origin);
+// socket.on('connect', function () {
+//   const socketID = socket.id; //
+//   console.log("Socket id",socketID);
+//   console.log("User id", );
+
+// });
 //
+if (logoutBtn) {
+  socket.emit('user-online', logoutBtn.dataset.userid);
+}
+socket.on('notification-comment', (name, i, isNoti, isUpdate = 1) => {
+  if (isUpdate === 1) {
+    const span = document.body
+      .querySelector('.posts')
+      ?.children[i].querySelector('.comment-count');
+    if (span) {
+      span.textContent = (parseInt(span.textContent) + 1).toString();
+    }
+  }
+  if (isNoti === 1) {
+    toast({
+      title: 'Notifacation',
+      message: `${name} has already comment your post`,
+      type: 'success',
+      duration: 5000,
+    });
+  }
+});
+socket.on('notification-like', (name, i, isLike, isNoti, isUpdate = 1) => {
+  if (isLike === 1) {
+    if (isUpdate === 1) {
+      const span = document.body
+        .querySelector('.posts')
+        .children[i].querySelector('span');
+      span.textContent = (parseInt(span.textContent) + 1).toString();
+    }
+    if (isNoti === 1) {
+      toast({
+        title: 'Notifacation',
+        message: `${name} has already liked your post`,
+        type: 'success',
+        duration: 5000,
+      });
+    }
+  } else if (isLike === 0) {
+    if (isUpdate) {
+      const span = document.body
+        .querySelector('.posts')
+        .children[i].querySelector('span');
+      span.textContent = (parseInt(span.textContent) - 1).toString();
+    }
+    if (isNoti === 1) {
+      toast({
+        title: 'Notifacation',
+        message: `${name} has already unliked your post`,
+        type: 'warning',
+        duration: 5000,
+      });
+    }
+  }
+});
 if (btnLogin) {
   btnLogin.addEventListener('click', async (e) => {
     e.preventDefault();
@@ -118,9 +181,6 @@ if (btnDelete.length > 0) {
           await deletePost(btn.dataset.id, btn.closest('.post'));
         },
       });
-      // if (confirm('Do you want to delete this post?')) {
-      //   await deletePost(btn.dataset.id, btn.closest('.post'));
-      // }
     });
   });
 }
@@ -129,7 +189,65 @@ if (btnLike.length > 0) {
     btn.addEventListener('click', async (e) => {
       e.preventDefault();
       const id = btn.dataset.id;
-      await likePost(id, btn);
+      const result = await likePost(id, btn);
+
+      let index = -1;
+      const posts = document.getElementsByClassName('posts')[0].children;
+
+      for (let i = 0; i < posts.length; i++) {
+        if (posts[i].isEqualNode(btn.closest('.post'))) {
+          index = i;
+        }
+      }
+      if (
+        result === 1 &&
+        btn.dataset.user.toString().trim() !==
+          logoutBtn.dataset.userid.toString().trim()
+      ) {
+        socket.emit(
+          'user-like',
+          btn.dataset.user,
+          logoutBtn.dataset.username,
+          index,
+          0
+        );
+      } else if (
+        result === 0 &&
+        btn.dataset.user.toString().trim() !==
+          logoutBtn.dataset.userid.toString().trim()
+      ) {
+        socket.emit(
+          'user-unlike',
+          btn.dataset.user,
+          logoutBtn.dataset.username,
+          index,
+          0
+        );
+      } else if (
+        result === 1 &&
+        btn.dataset.user.toString().trim() ===
+          logoutBtn.dataset.userid.toString().trim()
+      ) {
+        socket.emit(
+          'user-like',
+          btn.dataset.user,
+          logoutBtn.dataset.username,
+          index,
+          1
+        );
+      } else if (
+        result === 0 &&
+        btn.dataset.user.toString().trim() ===
+          logoutBtn.dataset.userid.toString().trim()
+      ) {
+        socket.emit(
+          'user-unlike',
+          btn.dataset.user,
+          logoutBtn.dataset.username,
+          index,
+          1
+        );
+      }
     });
   });
 }
@@ -143,17 +261,36 @@ if (btnSubmitCmt) {
     const id = btnSubmitCmt.dataset.id;
     if (!content) {
       dangerAlert('Please fill out and try again');
-      // document
-      //   .querySelector('.container')
-      //   .insertAdjacentHTML(
-      //     'afterbegin',
-      //     `<div class="alert alert-danger">Please fill out and try again</div>`
-      //   );
-      // window.setTimeout(() => {
-      //   document.querySelector('.alert').remove();
-      // }, 1500);
     } else {
-      await createComment(content, id);
+      const result = await createComment(content, id);
+      console.log(result);
+      if (
+        result === 1 &&
+        btnSubmitCmt.dataset.user.trim() !==
+          logoutBtn.dataset.userid.toString().trim()
+      ) {
+        console.log('Khác người');
+        socket.emit(
+          'user-comment',
+          btnSubmitCmt.dataset.user.trim(),
+          logoutBtn.dataset.username,
+          btnSubmitCmt.dataset.index,
+          0
+        );
+      } else if (
+        result === 1 &&
+        btnSubmitCmt.dataset.user.trim() ===
+          logoutBtn.dataset.userid.toString().trim()
+      ) {
+        console.log('Cùng người');
+        socket.emit(
+          'user-comment',
+          btnSubmitCmt.dataset.user.trim(),
+          logoutBtn.dataset.username,
+          btnSubmitCmt.dataset.index,
+          1
+        );
+      }
     }
   });
 }
@@ -291,7 +428,6 @@ if (btnAddExperience) {
       description,
       current: isCurrentJob.checked,
     };
-    console.log(data);
     await addExperience(data);
   });
 }

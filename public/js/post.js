@@ -95,6 +95,8 @@ export const likePost = async (id, btn) => {
       document.getElementById(`${id}`).textContent = res.data.length;
       btn.closest('.btn').classList.remove('btn-light');
       btn.closest('.btn').classList.add('btn-success');
+      // Thông báo cho server
+      return 1;
     }
   } catch (error) {
     // console.log(error.response);
@@ -109,6 +111,7 @@ export const likePost = async (id, btn) => {
           document.getElementById(`${id}`).textContent = resUnLike.data.length;
           btn.closest('.btn').classList.add('btn-light');
           btn.closest('.btn').classList.remove('btn-success');
+          return 0;
         }
       } catch (err) {
         // console.log(err.response);
@@ -172,33 +175,13 @@ export const createComment = async (text, id) => {
       successAlert('Comment successfully', () => {
         location.reload();
       });
-      // document
-      //   .querySelector('.container')
-      //   .insertAdjacentHTML(
-      //     'afterbegin',
-      //     `<div class="alert alert-success">Comment successfully</div>`
-      //   );
 
-      // window.setTimeout(() => {
-      //   document.querySelector('.alert').remove();
-      //   location.reload();
-      // }, 1500);
+      return 1;
     }
   } catch (error) {
     dangerAlert('Something went wrong!', () => {
       location.reload();
     });
-    // document
-    //   .querySelector('.container')
-    //   .insertAdjacentHTML(
-    //     'afterbegin',
-    //     `<div class="alert alert-danger">Something went wrong!</div>`
-    //   );
-
-    // window.setTimeout(() => {
-    //   document.querySelector('.alert').remove();
-    //   location.reload();
-    // }, 1500);
   }
 };
 

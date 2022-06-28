@@ -30,7 +30,9 @@
         class="btn btn-dark my-1"
         value="Submit"
         id="btnSubmitCmt"
-        data-id="<%= post._id %> "
+        data-user="<%= post.user %>"
+        data-id="<%= post._id %>"
+        data-index="<%- index ? index : undefined %>"
       />
     </form>
   </div>

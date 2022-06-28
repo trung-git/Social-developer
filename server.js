@@ -6,8 +6,12 @@ const path = require('path');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const cors = require('cors');
+const res = require('express/lib/response');
 
 const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+
 const limiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
   max: 150,
@@ -71,7 +75,69 @@ app.use('/api/profiles', require('./routes/api/profile'));
 app.use('/api/posts', require('./routes/api/post'));
 
 const PORT = process.env.PORT || 3000;
+let userOnline = {};
+io.on('connection', function (socket) {
+  socket.on('disconnect', () => {
+    if (socket.userId) {
+      if (userOnline.hasOwnProperty(socket.userId)) {
+        delete userOnline[socket.userId];
+      }
+    }
+  });
 
-app.listen(PORT, () => {
+  socket.on('user-online', function (data) {
+    socket.userId = data;
+    userOnline[data] = socket;
+  });
+  socket.on('user-like', (id, name, index, isYourPost) => {
+    if (userOnline.hasOwnProperty(id.trim())) {
+      if (isYourPost === 1) {
+        userOnline[id.trim()].broadcast.emit(
+          'notification-like',
+          name,
+          index,
+          1,
+          0
+        );
+      } else if (isYourPost === 0) {
+        userOnline[id.trim()].emit('notification-like', name, index, 1, 1, 0);
+        socket.broadcast.emit('notification-like', name, index, 1, 0);
+      }
+    }
+  });
+  socket.on('user-unlike', (id, name, index, isYourPost) => {
+    if (userOnline.hasOwnProperty(id.trim())) {
+      if (isYourPost === 1) {
+        userOnline[id.trim()].broadcast.emit(
+          'notification-like',
+          name,
+          index,
+          0,
+          0
+        );
+      } else if (isYourPost === 0) {
+        userOnline[id.trim()].emit('notification-like', name, index, 0, 1, 0);
+        socket.broadcast.emit('notification-like', name, index, 0, 0);
+      }
+    }
+  });
+  socket.on('user-comment', (id, name, index, isYourPost) => {
+    if (userOnline.hasOwnProperty(id.trim())) {
+      if (isYourPost === 1) {
+        userOnline[id.trim()].broadcast.emit(
+          'notification-comment',
+          name,
+          index,
+          0
+        );
+      } else if (isYourPost === 0) {
+        userOnline[id.trim()].emit('notification-comment', name, index, 1, 0);
+        socket.broadcast.emit('notification-comment', name, index, 0, 1);
+      }
+    }
+  });
+});
+
+server.listen(PORT, () => {
   console.log(`Server started on http://localhost:${PORT}`);
 });

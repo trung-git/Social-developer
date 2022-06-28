@@ -27,7 +27,7 @@
   <div class="posts">
     <%if (posts) {%>
     <!--  -->
-    <% posts.forEach((post)=>{%>
+    <% posts.forEach((post,index)=>{%>
     <div class="post bg-white p-1 my-1">
       <div>
         <a href="<%= "/user/"+post.user %>">
@@ -45,12 +45,13 @@
           type="button"
           class="btn btnLike <%- post.likes.some((currentValue) => {return currentValue.user.toString() === locals.user.id.toString()}) ? "btn-success" : "btn-light" %>"
           data-id="<%= post._id%>"
+          data-user="<%= post.user %> "
         >
           <i class="fas fa-thumbs-up"></i>
           <span id="<%= post._id%>"><%= post.likes.length%></span>
         </button>
 
-        <a href="/post/<%= post._id%>" class="btn btn-primary">
+        <a href="/post/<%= post._id%>/<%= index %>" data-index="<%= index %>" class="btn btn-primary">
           Discussion
           <span class="comment-count"><%= post.comments.length%></span>
         </a>

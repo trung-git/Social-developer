@@ -13,6 +13,7 @@ const User = require('../models/User');
 const router = express.Router();
 
 router.use(getUserFromToken);
+
 // @route     GET /
 // @desc      Render index landing page
 // @access    Public
@@ -58,12 +59,12 @@ router.get(
 // @desc      Render a post
 // @access    Private
 router.get(
-  '/post/:id',
+  '/post/:id/:index',
   navigateUserAfterLogin,
   checkUserProfile,
   async (req, res) => {
     const post = await Post.findById(req.params.id);
-    res.render('post', { post });
+    res.render('post', { post, index: req.params.index });
   }
 );
 // @route     GET /update-profile

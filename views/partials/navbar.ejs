@@ -28,7 +28,13 @@
       >
     </li>
     <li>
-      <a href="/api/auth/logout" title="Logout">
+      <a
+        id="logoutBtn"
+        data-userid="<%= locals.user.id %>"
+        data-username="<%= locals.user.name %>"
+        href="/api/auth/logout"
+        title="Logout"
+      >
         <i class="fas fa-sign-out-alt"></i>
         <span class="hide-sm">Logout</span></a
       >
