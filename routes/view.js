@@ -124,9 +124,7 @@ router.get(`/user/:id`, async (req, res, next) => {
     console.log(doc.githubusername);
     if (doc.githubusername?.trim().length > 0) {
       axios
-        .get(
-          `http://localhost:3000/api/profiles/github/${doc.githubusername.trim()}`
-        )
+        .get(`/api/profiles/github/${doc.githubusername.trim()}`)
         .then(function (response) {
           // handle success
 
