@@ -20,7 +20,7 @@ router.post(
       'Please enter a password with 6 or more characters'
     ).isLength({ min: 6 }),
   ],
-  async (req, res) => {
+  async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
@@ -65,7 +65,7 @@ router.post(
         config.get('jwtSecret'),
         { expiresIn: 360000 },
         (err, token) => {
-          if (err) throw err;
+          if (err) next(err);
           const cookieOptions = {
             expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
             httpOnly: true,
@@ -80,7 +80,8 @@ router.post(
       );
     } catch (err) {
       console.error(err.message);
-      res.status(500).send('Server error');
+      // res.status(500).send('Server error');
+      next(err);
     }
   }
 );

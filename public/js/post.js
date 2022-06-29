@@ -15,33 +15,11 @@ export const createPost = async (text) => {
       successAlert('Post successfully', () => {
         location.assign('/home');
       });
-      // document
-      //   .querySelector('.container')
-      //   .insertAdjacentHTML(
-      //     'afterbegin',
-      //     `<div class="alert alert-success">Post successfully</div>`
-      //   );
-
-      // window.setTimeout(() => {
-      //   document.querySelector('.alert').remove();
-      //   location.assign('/home');
-      // }, 1500);
     }
   } catch (error) {
     dangerAlert('Something went wrong!', () => {
       location.assign('/home');
     });
-    // document
-    //   .querySelector('.container')
-    //   .insertAdjacentHTML(
-    //     'afterbegin',
-    //     `<div class="alert alert-danger">Something went wrong!</div>`
-    //   );
-
-    // window.setTimeout(() => {
-    //   document.querySelector('.alert').remove();
-    //   location.assign('/home');
-    // }, 1500);
   }
 };
 export const updatePost = async (id, text, p, btn) => {
@@ -55,7 +33,6 @@ export const updatePost = async (id, text, p, btn) => {
     });
 
     if (res.status === 200 && res.statusText === 'OK') {
-      // document.getElementById('txtContentPost').textContent = '';
       successAlert('Update post successfully');
       p.innerHTML = text;
       btn.setAttribute('data-text', text);
@@ -64,7 +41,6 @@ export const updatePost = async (id, text, p, btn) => {
   } catch (error) {
     console.log(error);
     dangerAlert('Something went wrong!', () => {
-      // location.assign('/home');
       document.getElementById('myModal').style.display = 'none';
     });
   }
@@ -82,7 +58,6 @@ export const deletePost = async (id, btn) => {
     }
   } catch (error) {
     dangerAlert('Delete Fail. Please try again');
-    // alert('Delete Fail. Please try again');
   }
 };
 export const likePost = async (id, btn) => {
@@ -99,7 +74,6 @@ export const likePost = async (id, btn) => {
       return 1;
     }
   } catch (error) {
-    // console.log(error.response);
     if (error.response.status === 400 && error.response.data.statusCode === 0) {
       // Unlike
       try {
@@ -114,13 +88,9 @@ export const likePost = async (id, btn) => {
           return 0;
         }
       } catch (err) {
-        // console.log(err.response);
         dangerAlert('Unlike Fail. Please try again');
-
-        // alert('Unlike Fail. Please try again');
       }
     } else {
-      // alert('Like Fail. Please try again');
       dangerAlert('Like Fail. Please try again');
     }
   }
@@ -137,8 +107,6 @@ export const unlikePost = async (id, btn) => {
       btn.classList.add('btn-danger');
     }
   } catch (error) {
-    // console.log(error);
-
     dangerAlert('Unlike Fail. Please try again');
   }
 };
@@ -196,7 +164,6 @@ export const updateComment = async (id, cmt_id, text, p, btn) => {
     });
 
     if (res.status === 200 && res.statusText === 'OK') {
-      // document.getElementById('txtContentPost').textContent = '';
       successAlert('Update post successfully');
       p.innerHTML = text;
       btn.setAttribute('data-text', text);

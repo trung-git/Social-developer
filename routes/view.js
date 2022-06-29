@@ -40,7 +40,6 @@ router.get('/profiles', async (req, res) => {
   const profiles = Profile.find();
   profiles.populate({ path: 'user', select: '-password' });
   const doc = await profiles;
-  console.log(doc);
   res.render('profiles', { profiles: doc });
 });
 // @route     GET /home
@@ -75,7 +74,6 @@ router.get('/update-profile', navigateUserAfterLogin, async (req, res) => {
   if (!profile) {
     profile = {};
   }
-  console.log(profile);
   res.render('update-profile', { profile });
 });
 
@@ -88,7 +86,6 @@ router.get(
   checkUserProfile,
   async (req, res) => {
     let profile = await Profile.findOne({ user: req.user.id });
-    console.log(profile);
     res.render('dashboard', { profile });
   }
 );
@@ -117,17 +114,15 @@ router.get(
 );
 
 // @route     GET /profiles/:idUser
-// @desc      Render add experience page
+// @desc      Render a profile
 // @access    Private
-router.get(`/user/:id`, async (req, res) => {
+router.get(`/user/:id`, async (req, res, next) => {
   try {
     const profiles = Profile.findOne({ user: req.params.id });
     profiles.populate({ path: 'user', select: '-password' });
     const doc = await profiles;
-    // console.log(doc.githubusername);
-    if (doc.githubusername?.length > 0) {
-      // console.log('USERRRRR');
-
+    console.log(doc.githubusername);
+    if (doc.githubusername?.trim().length > 0) {
       axios
         .get(
           `http://localhost:3000/api/profiles/github/${doc.githubusername.trim()}`
@@ -135,20 +130,42 @@ router.get(`/user/:id`, async (req, res) => {
         .then(function (response) {
           // handle success
 
-          console.log(response.data);
           return res.render('profile', { doc, github: response.data });
         })
         .catch(function (error) {
           // handle error
-          console.log(error);
           return res.render('profile', { doc, github: [] });
         });
     } else {
       return res.render('profile', { doc, github: [] });
     }
+
+    //   }
+    //   if (doc.githubusername?.length > 0) {
+    //     // console.log('USERRRRR');
+
+    //     axios
+    //       .get(
+    //         `http://localhost:3000/api/profiles/github/${doc.githubusername.trim()}`
+    //       )
+    //       .then(function (response) {
+    //         // handle success
+
+    //         return res.render('profile', { doc, github: response.data });
+    //       })
+    //       .catch(function (error) {
+    //         // handle error
+    //         console.log(1);
+    //         return res.render('profile', { doc, github: [] });
+    //       });
+    //   } else {
+    //     return res.render('profile', { doc, github: [] });
+    //   }
   } catch (error) {
-    console.log(error);
-    res.send('400 - Not found');
+    // console.log(error);
+    // res.send('400 - Not found');
+    next(error);
   }
 });
+
 module.exports = router;

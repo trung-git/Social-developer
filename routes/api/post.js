@@ -11,7 +11,7 @@ const router = express.Router();
 router.post(
   '/',
   [auth, [check('text', 'Text is required').not().isEmpty()]],
-  async (req, res) => {
+  async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
@@ -31,7 +31,8 @@ router.post(
       res.json(post);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send('Server error');
+      // res.status(500).send('Server error');
+      next(err);
     }
   }
 );
@@ -40,13 +41,14 @@ router.post(
 // @desc      Get all posts
 // @access    Private
 
-router.get('/', auth, async (req, res) => {
+router.get('/', auth, async (req, res, next) => {
   try {
     const posts = await Post.find().sort({ date: -1 });
     res.json(posts);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server error');
+    // res.status(500).send('Server error');
+    next(err);
   }
 });
 
@@ -54,7 +56,7 @@ router.get('/', auth, async (req, res) => {
 // @desc      Get post by id
 // @access    Private
 
-router.get('/:id', auth, async (req, res) => {
+router.get('/:id', auth, async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);
 
@@ -67,7 +69,8 @@ router.get('/:id', auth, async (req, res) => {
     if (err.kind === 'ObjectId') {
       return res.status(400).json({ msg: 'Post not found' });
     }
-    res.status(500).send('Server error');
+    // res.status(500).send('Server error');
+    next(err);
   }
 });
 
@@ -75,7 +78,7 @@ router.get('/:id', auth, async (req, res) => {
 // @desc      Delete a post
 // @access    Private
 
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', auth, async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);
     if (!post) {
@@ -92,7 +95,8 @@ router.delete('/:id', auth, async (req, res) => {
     if (err.kind === 'ObjectId') {
       return res.status(400).json({ msg: 'Post not found' });
     }
-    res.status(500).send('Server error');
+    // res.status(500).send('Server error');
+    next(err);
   }
 });
 
@@ -100,7 +104,7 @@ router.delete('/:id', auth, async (req, res) => {
 // @desc      Update a post
 // @access    Private
 
-router.patch('/:id', auth, async (req, res) => {
+router.patch('/:id', auth, async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);
     if (!post) {
@@ -117,7 +121,8 @@ router.patch('/:id', auth, async (req, res) => {
     if (err.kind === 'ObjectId') {
       return res.status(400).json({ msg: 'Post not found' });
     }
-    res.status(500).send('Server error');
+    // res.status(500).send('Server error');
+    next(err);
   }
 });
 
@@ -125,7 +130,7 @@ router.patch('/:id', auth, async (req, res) => {
 // @desc      Like a post
 // @access    Private
 
-router.put('/like/:id', auth, async (req, res) => {
+router.put('/like/:id', auth, async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);
     if (!post) {
@@ -149,7 +154,8 @@ router.put('/like/:id', auth, async (req, res) => {
     if (err.kind === 'ObjectId') {
       return res.status(404).json({ msg: 'Post not found' });
     }
-    res.status(500).send('Server error');
+    // res.status(500).send('Server error');
+    next(err);
   }
 });
 
@@ -157,7 +163,7 @@ router.put('/like/:id', auth, async (req, res) => {
 // @desc      Unlike a post
 // @access    Private
 
-router.put('/unlike/:id', auth, async (req, res) => {
+router.put('/unlike/:id', auth, async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);
     if (!post) {
@@ -191,7 +197,8 @@ router.put('/unlike/:id', auth, async (req, res) => {
     if (err.kind === 'ObjectId') {
       return res.status(400).json({ msg: 'Post not found' });
     }
-    res.status(500).send('Server error');
+    // res.status(500).send('Server error');
+    next(err);
   }
 });
 
@@ -201,7 +208,7 @@ router.put('/unlike/:id', auth, async (req, res) => {
 router.post(
   '/comment/:id',
   [auth, [check('text', 'Text is required').not().isEmpty()]],
-  async (req, res) => {
+  async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
@@ -226,14 +233,15 @@ router.post(
       res.json(post.comments);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send('Server error');
+      // res.status(500).send('Server error');
+      next(err);
     }
   }
 );
 // @route     DELETE api/posts/comment/:id/:cmt_id
 // @desc      Delete a comment
 // @access    Private
-router.delete('/comment/:id/:cmt_id', auth, async (req, res) => {
+router.delete('/comment/:id/:cmt_id', auth, async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);
     // Pull out comment
@@ -266,7 +274,8 @@ router.delete('/comment/:id/:cmt_id', auth, async (req, res) => {
     res.json(post.comments);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server error');
+    // res.status(500).send('Server error');
+    next(err);
   }
 });
 
@@ -274,7 +283,7 @@ router.delete('/comment/:id/:cmt_id', auth, async (req, res) => {
 // @desc      Update a cmt
 // @access    Private
 
-router.patch('/comment/:id/:cmt_id', auth, async (req, res) => {
+router.patch('/comment/:id/:cmt_id', auth, async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);
     // Pull out comment
@@ -298,7 +307,8 @@ router.patch('/comment/:id/:cmt_id', auth, async (req, res) => {
     if (err.kind === 'ObjectId') {
       return res.status(400).json({ msg: 'Comment not found' });
     }
-    res.status(500).send('Server error');
+    // res.status(500).send('Server error');
+    next(err);
   }
 });
 

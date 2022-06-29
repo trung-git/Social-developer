@@ -6,7 +6,9 @@ const path = require('path');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const cors = require('cors');
-const res = require('express/lib/response');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+const compression = require('compression');
 
 const app = express();
 const server = require('http').Server(app);
@@ -14,7 +16,7 @@ const io = require('socket.io')(server);
 
 const limiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
-  max: 150,
+  max: 500,
   message: 'Too many from this IP, please try again after an hour',
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
@@ -49,7 +51,16 @@ app.use(
     },
   })
 );
-app.use('/api', limiter);
+//Data Sanitization against NoSQL query injection
+app.use(mongoSanitize());
+//Data Sanitization against XSS
+app.use(xss());
+//Prevent HTTP params polution
+app.use(cors());
+app.options('*', cors());
+app.use(compression());
+app.use(limiter);
+
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
@@ -61,20 +72,25 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('layout', path.join(__dirname, './views/layouts/layout'));
 app.use(expressLayout);
 // Define Routes
-// app.use(function (req, res, next) {
-//   res.setHeader(
-//     'Content-Security-Policy-Report-Only',
-//     "default-src 'self' https://unpkg.com/axios/dist/axios.min.js; script-src 'self' https://unpkg.com/axios/dist/axios.min.js; img-src * 'self' data: https:; style-src 'self' https://fonts.googleapis.com/ https://use.fontawesome.com/releases/v5.8.1/css/all.css; font-src 'self' https://fonts.gstatic.com https://use.fontawesome.com; frame-src 'self'"
-//   );
-//   next();
-// });
+
 app.use('/', require('./routes/view'));
 app.use('/api/users', require('./routes/api/user'));
 app.use('/api/auth', require('./routes/api/auth'));
 app.use('/api/profiles', require('./routes/api/profile'));
 app.use('/api/posts', require('./routes/api/post'));
 
+app.all('*', (req, res, next) => {
+  res.render('error', { statusCode: 404, message: 'Not Found' });
+});
+app.use((err, req, res, next) => {
+  res.render('error', { statusCode: '', message: '' });
+});
+
 const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Server started on http://localhost:${PORT}`);
+});
+
 let userOnline = {};
 io.on('connection', function (socket) {
   socket.on('disconnect', () => {
@@ -116,7 +132,7 @@ io.on('connection', function (socket) {
           0
         );
       } else if (isYourPost === 0) {
-        userOnline[id.trim()].emit('notification-like', name, index, 0, 1, 0);
+        userOnline[id.trim()].emit('notification-like', name, index, 0, 0, 0);
         socket.broadcast.emit('notification-like', name, index, 0, 0);
       }
     }
@@ -137,7 +153,20 @@ io.on('connection', function (socket) {
     }
   });
 });
+process.on('uncaughtException', (err) => {
+  console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+  console.log(err.name, err.message);
+  process.exit(1);
+});
 
-server.listen(PORT, () => {
-  console.log(`Server started on http://localhost:${PORT}`);
+process.on('unhandledRejection', (err) => {
+  console.log('UNHANDLED REJECTION! 💥 Shutting down...');
+  console.log(err.name, err.message);
+
+  process.exit(1);
+});
+
+process.on('SIGTERM', () => {
+  console.log('🤟 SIGTERM RECEIVED. Shutting down grecefully');
+  console.log('🔥 Process terminated!');
 });

@@ -68,7 +68,7 @@ socket.on('notification-comment', (name, i, isNoti, isUpdate = 1) => {
   }
   if (isNoti === 1) {
     toast({
-      title: 'Notifacation',
+      title: 'Notification',
       message: `${name} has already comment your post`,
       type: 'success',
       duration: 5000,
@@ -85,7 +85,7 @@ socket.on('notification-like', (name, i, isLike, isNoti, isUpdate = 1) => {
     }
     if (isNoti === 1) {
       toast({
-        title: 'Notifacation',
+        title: 'Notification',
         message: `${name} has already liked your post`,
         type: 'success',
         duration: 5000,
@@ -100,7 +100,7 @@ socket.on('notification-like', (name, i, isLike, isNoti, isUpdate = 1) => {
     }
     if (isNoti === 1) {
       toast({
-        title: 'Notifacation',
+        title: 'Notification',
         message: `${name} has already unliked your post`,
         type: 'warning',
         duration: 5000,
@@ -113,14 +113,6 @@ if (btnLogin) {
     e.preventDefault();
     const email = document.getElementById('login-username').value;
     const password = document.getElementById('login-password').value;
-    //
-    // function removeAlert() {
-    //   document.querySelectorAll('.alert').forEach(function (node) {
-    //     node.parentNode.removeChild(node);
-    //   });
-    // }
-    // document.getElementById('login-username').onfocus = removeAlert;
-    // document.getElementById('login-password').onfocus = removeAlert;
 
     // Validate Input
     const errorMessage = [];
@@ -156,15 +148,6 @@ if (btnCreatePost) {
       .value.replace(/\n\r?/g, '<br>');
     if (!content) {
       dangerAlert('Please fill out and try again');
-      // document
-      //   .querySelector('.container')
-      //   .insertAdjacentHTML(
-      //     'afterbegin',
-      //     `<div class="alert alert-danger">Please fill out and try again</div>`
-      //   );
-      // window.setTimeout(() => {
-      //   document.querySelector('.alert').remove();
-      // }, 1500);
     } else {
       await createPost(content);
     }
@@ -310,13 +293,6 @@ if (btnDeleteCmt.length > 0) {
           );
         },
       });
-      // if (confirm('Do you want to delete this comment?')) {
-      //   await deleteCmt(
-      //     document.getElementById('btnSubmitCmt').dataset.id,
-      //     btn.dataset.id,
-      //     btn.closest('.post')
-      //   );
-      // }
     });
   }
 }
@@ -330,15 +306,6 @@ if (btnRegister) {
       document.getElementById('inputConfirmPassword').value
     ) {
       dangerAlert('Passwords are not the same');
-      // document
-      //   .querySelector('.container')
-      //   .insertAdjacentHTML(
-      //     'afterbegin',
-      //     `<div class="alert alert-danger">Passwords are not the same</div>`
-      //   );
-      // window.setTimeout(() => {
-      //   document.querySelector('.alert').remove();
-      // }, 5000);
     } else {
       // Goi API
       await register(
@@ -368,27 +335,9 @@ if (btnCreateProfile) {
     if (status == 0 || !skills) {
       if (status == 0) {
         dangerAlert('Please enter your status');
-        //   document
-        //     .querySelector('#status')
-        //     .insertAdjacentHTML(
-        //       'afterend',
-        //       `<div class="alert alert-danger">Please enter your status</div>`
-        //     );
-        //   window.setTimeout(() => {
-        //     document.querySelector('.alert').remove();
-        //   }, 5000);
       }
       if (!skills) {
         dangerAlert('Please enter your skills');
-        // document
-        //   .querySelector('#skills')
-        //   .insertAdjacentHTML(
-        //     'afterend',
-        //     `<div class="alert alert-danger">Please enter your skills</div>`
-        //   );
-        // window.setTimeout(() => {
-        //   document.querySelector('.alert').remove();
-        // }, 5000);
       }
     } else {
       await createOrUpdateProfile({
@@ -463,12 +412,6 @@ if (btnDeleteExperience.length > 0) {
           );
         },
       });
-      // if (confirm('Do you want to delete this Experience ? ') == true) {
-      //   await deleteExperience(
-      //     e.target.dataset.id,
-      //     btn.parentElement.parentElement
-      //   );
-      // }
     });
   }
 }
@@ -486,12 +429,6 @@ if (btnDeleteEducation.length > 0) {
           );
         },
       });
-      // if (confirm('Do you want to delete this Education ?') == true) {
-      //   await deleteEducation(
-      //     e.target.dataset.id,
-      //     btn.parentElement.parentElement
-      //   );
-      // }
     });
   }
 }
@@ -505,9 +442,6 @@ if (btnDeleteAccount) {
         await deleteAccount();
       },
     });
-    // if (confirm('Do you want to delete this Account ?') == true) {
-    //   await deleteAccount();
-    // }
   });
 }
 
@@ -698,5 +632,11 @@ if (btnModalSaveCpw) {
         dangerAlert('Some thing went wrong, Please try again !');
       }
     }
+  });
+}
+
+if (document.getElementById('errorBtn')) {
+  document.getElementById('errorBtn').addEventListener('click', () => {
+    window.location = '/home';
   });
 }

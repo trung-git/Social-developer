@@ -1,0 +1,11 @@
+<div class="error">
+  <div class="error__container">
+    <h1 class="error__number"><%- statusCode ? statusCode : 500 %></h1>
+    <div class="error__content">
+      <%- message ? message : "Internal server error" %>
+    </div>
+    <button id="errorBtn" type="button" class="btn btn-primary">
+      BACK TO HOMEPAGE
+    </button>
+  </div>
+</div>
