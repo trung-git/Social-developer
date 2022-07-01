@@ -2,7 +2,7 @@
 
 # FODEV (DEVELOPER CONNECTOR)
 
-![Project Image](fodev.PNG)
+![Project Image](public/img/fodev.PNG)
 
 > A SOCIAL WEBSITE FOR DEVELOPER
 
@@ -83,6 +83,6 @@ SOFTWARE.
 
 ## Author Info
 
-- Twitter - [@jamesqquick](https://twitter.com/jamesqquick)
-- Website - [James Q Quick](https://jamesqquick.com)
+- LinkedIn - [Trung Huynh](https://www.linkedin.com/in/trung-hu%E1%BB%B3nh-7522b5213/)
+- CV Online - [Huynh Thanh Trung](https://trung-git.github.io/cv-trung/)
 <p align="right">(<a href="#top">back to top</a>)</p>
